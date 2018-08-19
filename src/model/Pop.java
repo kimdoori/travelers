@@ -8,14 +8,14 @@ public class Pop {
 	private String location;
 	private String content;
 	private int like_num;
-	private Time reg_Date;
+	private String reg_Date;
 	
 	
 	
 	public Pop() {
 		super();
 	}
-	public Pop(int id, String title, String location, String content, int like_num, Time reg_Date) {
+	public Pop(int id, String title, String location, String content, int like_num, String reg_Date) {
 		super();
 		this.id = id;
 		this.title = title;
@@ -54,11 +54,11 @@ public class Pop {
 	public void setLike_num(int like_num) {
 		this.like_num = like_num;
 	}
-	public Time getReg_Date() {
+	public String getReg_Date() {
 		return reg_Date;
 	}
-	public void setReg_Date(Time reg_Date) {
-		this.reg_Date = reg_Date;
+	public void setReg_Date(String string) {
+		this.reg_Date = string;
 	}
 	@Override
 	public String toString() {
