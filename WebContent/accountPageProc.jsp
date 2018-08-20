@@ -1,73 +1,104 @@
+<%@page import="model.Pop"%>
+<%@page import="java.util.List"%>
+<%@page import="database.PopCornDAO"%>
+<%@page import="model.Corn"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>계정 페이지</title>
 <link rel="stylesheet" href="css/account.css">
-<script src="js/account.js">
+<script src="js/account.js"></script>
 
 </head>
 <body>
-<form action="logout.jsp">
-	<input type="submit" value="로그아웃">
-</form>
+
+	<%
+		request.setCharacterEncoding("utf-8");
+
+		String user_id = (String) session.getAttribute("user_id");
+
+		PopCornDAO dao = PopCornDAO.getInstance();
+
+		Corn corn = dao.selectOneCorn(user_id);
+		System.out.println(corn);
+
+		if (corn == null) {//실패 
+			out.println("<script>alert('네트워크를 확인해주세요.');</script>");
+			out.println("<script> window.history.back();</script>");
+
+		} else {//성공
+	%>
+	<div class="content-profile-page">
+		<div class="profile-user-page card">
+			<div class="img-user-profile">
+				<div class="card hovercard">
+					<div class="card-background">
+						<img class="card-bkimg" alt="" src="image/none.png">
+					</div>
+					<div class="useravatar">
+						<img alt="" src="image/none.png">
+					</div>
+				</div>
+			</div>
+
+			<a href="modifyPage.jsp"><button id="floating">MODIFY</button></a>
+
+			<div class="user-profile-data">
+				<h1><%=corn.getName()%></h1>
+				<p><%=corn.getNickname()%></p>
+			</div>
+			<div class="description-profile">
+				<%=corn.getBirth()%>
+				|
+				<%=corn.getPhone()%>
+			</div>
+			<ul class="data-user">
+				<li><a><strong><%=corn.getLike_num()%></strong><span>LIKE</span></a></li>
+				<li><a><strong><%=corn.getPop_num()%></strong><span>POP</span></a></li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="content-profile-page">
+		<div class="profile-user-page card">
+			<div class="user-profile-data">
+				<h3>새로운 POP을 작성하시겠어요?</h3>
+				<a href="writePage.jsp" id="write">글 작성하기</a>
+			</div>
+
+		</div>
+	</div>
+	<div class="content-profile-page">
+		<div class="profile-user-page card">
+			<div class="user-profile-data">
+				<section style="text-align: right;">
+					<a href="deleteAll.jsp" id="write">전체 삭제하기</a>
+				</section>
+				<section>
+					<%
+						List<Pop> list = dao.selectAllPop(user_id);
+							if (list.isEmpty()) {
+								out.println("게시한 POP이 없습니다.");
+							} else {
+								for (Pop pop : list) {
+									out.println("<div>" + pop.getTitle() + "</div>");
+								}
+							}
+					%>
+
+				</section>
+			</div>
+
+		</div>
+	</div>
 
 
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-<!------ Include the above in your HEAD tag ---------->
-
-<div class="col-lg-6 col-sm-6">
-    <div class="card hovercard">
-        <div class="card-background">
-            <img class="card-bkimg" alt="" src="image/none.png">
-            <!-- http://lorempixel.com/850/280/people/9/ -->
-        </div>
-        <div class="useravatar">
-            <img alt="" src="image/none.png">
-        </div>
-        <div class="card-info"> <span class="card-title">Pamela Anderson</span>
-
-        </div>
-    </div>
-    <div class="btn-pref btn-group btn-group-justified btn-group-lg" role="group" aria-label="...">
-        <div class="btn-group" role="group">
-            <button type="button" id="stars" class="btn btn-primary" href="#tab1" data-toggle="tab"><span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-                <div class="hidden-xs">Stars</div>
-            </button>
-        </div>
-        <div class="btn-group" role="group">
-            <button type="button" id="favorites" class="btn btn-default" href="#tab2" data-toggle="tab"><span class="glyphicon glyphicon-heart" aria-hidden="true"></span>
-                <div class="hidden-xs">Favorites</div>
-            </button>
-        </div>
-        <div class="btn-group" role="group">
-            <button type="button" id="following" class="btn btn-default" href="#tab3" data-toggle="tab"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-                <div class="hidden-xs">Following</div>
-            </button>
-        </div>
-    </div>
-
-        <div class="well">
-      <div class="tab-content">
-        <div class="tab-pane fade in active" id="tab1">
-          <h3>This is tab 1</h3>
-        </div>
-        <div class="tab-pane fade in" id="tab2">
-          <h3>This is tab 2</h3>
-        </div>
-        <div class="tab-pane fade in" id="tab3">
-          <h3>This is tab 3</h3>
-        </div>
-      </div>
-    </div>
-    
-    </div>
-            
-    
+	<%
+		}
+	%>
 
 
 </body>

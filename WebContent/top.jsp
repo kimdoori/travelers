@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,20 +10,26 @@
 
 </head>
 <body>
-<%
-	request.setCharacterEncoding("UTF-8");
-%>
+	<%
+		request.setCharacterEncoding("UTF-8");
+	
+		String user_id = (String)session.getAttribute("user_id");
+	%>
 
-<div class="navbar">
-<div class="left">
-  <a href="index.jsp">MAIN</a>
-  <a href="listPop.jsp">POP</a>
-  <a href="listCorn.jsp">CORN</a>
-</div>
-<div class="right">
-  <a href="accountPage.jsp">계정</a>
-</div>
-</div>
+	<div class="navbar">
+		<div class="left">
+			<a href="index.jsp">MAIN</a>
+			<a href="listPop.jsp">POP</a> 
+			<a href="listCorn.jsp">CORN</a>
+		</div>
+		<div class="right">
+		<% 
+		if(user_id != null)
+			out.println("<a href='logout.jsp'>LOGOUT</a>");
+		%>
+			 <a href="accountPage.jsp">ACCOUNT</a>
+		</div>
+	</div>
 
 
 </body>

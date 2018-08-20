@@ -53,23 +53,47 @@ public class PopCornDAO {
 	}
 
 	// 게시글 추가 함수
-	public void insertPop(Pop pop) {
+	// 0-> 성공 1->실패
+	public int insertPop(Pop pop,String corn_id) {
 
 		PreparedStatement pstmt = null;
+		PreparedStatement pstmt2 = null;
+		ResultSet rs = null;
+		
+		int return_code = -1;
 
 		try {
-			pstmt = connection.prepareStatement("insert into pop(title,location,content) values(?,?,?)");
-
-			pstmt.setString(1, pop.getTitle());
-			pstmt.setString(2, pop.getLocation());
-			pstmt.setString(3, pop.getContent());
-
+			pstmt = connection.prepareStatement("insert into pop(corn_id,title,location,content) values(?,?,?,?)");
+			pstmt.setString(1, corn_id);
+			pstmt.setString(2, pop.getTitle());
+			pstmt.setString(3, pop.getLocation());
+			pstmt.setString(4, pop.getContent());
+			
 			pstmt.executeUpdate();
+			
+			pstmt2 = connection.prepareStatement("SELECT LAST_INSERT_ID();");
+			rs = pstmt2.executeQuery();
+			
+			String[] photo = {pop.getPhoto1(),pop.getPhoto2(),pop.getPhoto3()};
+
+			if (rs.next()) {
+
+				int id = rs.getInt("LAST_INSERT_ID()");
+				for(int i=0;i<3;i++) { 
+					if(photo[i].equals("") )
+						continue;
+					insertPopPhoto(photo[i],id);
+				}
+
+			}
+
+			return_code = 0;
 
 		} catch (SQLException e) {
 
 			System.out.println("게시글 추가에 실패했습니다.");
 			e.printStackTrace();
+			return_code=1;
 
 		} finally {
 
@@ -80,6 +104,43 @@ public class PopCornDAO {
 					e.printStackTrace();
 				}
 		}
+		return return_code;
+
+	}
+	
+	public int insertPopPhoto(String photo,int id) {
+
+		PreparedStatement pstmt = null;
+
+		int return_code = -1;
+
+		try {
+			pstmt = connection.prepareStatement("insert into pop_deatil values(?,?)");
+
+			pstmt.setInt(1, id);
+			pstmt.setString(2, photo);
+		
+			pstmt.executeUpdate();
+			
+			
+			return_code = 0;
+
+		} catch (SQLException e) {
+
+			System.out.println("사진 추가에 실패했습니다.");
+			e.printStackTrace();
+			return_code=1;
+
+		} finally {
+
+			if (pstmt != null)
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+		}
+		return return_code;
 
 	}
 
@@ -325,7 +386,7 @@ public class PopCornDAO {
 	}
 
 	// 회원 등록
-	// 0-> 성공 	1->이미 있는 회원	2->실패
+	// 0-> 성공 1->이미 있는 회원 2->실패
 	public int insertCorn(Corn corn) {
 
 		PreparedStatement pstmt = null;
@@ -342,7 +403,6 @@ public class PopCornDAO {
 			pstmt.setString(5, corn.getBirth());
 			pstmt.setString(6, corn.getPhone());
 			pstmt.setInt(7, 0);
-			
 
 			pstmt.executeUpdate();
 			return_code = 0;
@@ -350,7 +410,7 @@ public class PopCornDAO {
 		} catch (SQLException e) {
 
 			System.out.println("회원 등록에 실패했습니다.");
-				return_code = 2;
+			return_code = 2;
 
 			if (e.getErrorCode() == 1062) {// 이미 있는 회원
 				return_code = 1;
@@ -457,7 +517,7 @@ public class PopCornDAO {
 
 			{
 				Corn corn = new Corn();
-				
+
 				corn.setId(rs.getString("id"));
 				corn.setPw(rs.getString("pw"));
 				corn.setName(rs.getString("name"));
@@ -500,7 +560,7 @@ public class PopCornDAO {
 
 		try {
 
-			pstmt = connection.prepareStatement("select * from pop where id = ?");
+			pstmt = connection.prepareStatement("select * from corn where id = ?");
 
 			pstmt.setString(1, corn_id);
 
@@ -701,8 +761,8 @@ public class PopCornDAO {
 
 	}
 
-	// 로그인 
-	//0->성공 	1->비밀번호 틀림 	2->없음 		3->실패
+	// 로그인
+	// 0->성공 1->비밀번호 틀림 2->없음 3->실패
 	public int checkCorn(Corn corn) {
 
 		PreparedStatement pstmt = null;
