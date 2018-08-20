@@ -35,7 +35,7 @@ public class PopCornDAO {
 			e.printStackTrace();
 
 		} catch (ClassNotFoundException e) {
-			System.out.println("클래스가 없습니디ㅏ.");
+			System.out.println("클래스가 없습니다.");
 			e.printStackTrace();
 
 		}
@@ -531,15 +531,15 @@ public class PopCornDAO {
 	}
 
 	// 회원 정보 업데이트
-	public void updatCorn(Corn corn) {
+	public int updateCorn(Corn corn) {
 
 		PreparedStatement pstmt = null;
+		
+		int return_code=-1;
 
 		try {
-			pstmt = connection.prepareStatement("update corn set pw = ?, name = ?, "
-
-					+ "nickname = ?, birth = ?, phone = ? where id = ?");
-
+			pstmt = connection.prepareStatement("update corn set pw = ?,name = ?,nickname = ?,birth = ?, phone = ? where id = ? ");
+			
 			pstmt.setString(6, corn.getId());
 			pstmt.setString(1, corn.getPw());
 			pstmt.setString(2, corn.getName());
@@ -548,11 +548,13 @@ public class PopCornDAO {
 			pstmt.setString(5, corn.getPhone());
 
 			pstmt.executeUpdate();
+			return_code=0;
 
 		} catch (SQLException e) {
 
 			System.out.println("회원 정보 수정에 실패했습니다.");
 			e.printStackTrace();
+			return_code=1;
 		} finally {
 
 			if (pstmt != null)
@@ -562,6 +564,7 @@ public class PopCornDAO {
 					e.printStackTrace();
 				}
 		}
+		return return_code;
 
 	}
 
