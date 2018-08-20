@@ -18,6 +18,7 @@
 		String user_pw = request.getParameter("pw");
 		
 		Corn corn = new Corn(user_id,user_pw);
+		System.out.println(corn);
 		
 		PopCornDAO dao = PopCornDAO.getInstance();
 		

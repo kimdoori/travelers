@@ -870,6 +870,48 @@ public class PopCornDAO {
 
 	}
 
+	
+	public boolean isLike(int pop_id,String corn_id) {
+		PreparedStatement pstmt = null;
+
+		ResultSet rs = null;
+
+		boolean return_code = false;
+
+		try {
+
+			pstmt = connection.prepareStatement("select * from pop_like where pop_id = ? and corn_id = ?");
+
+			pstmt.setInt(1, pop_id);
+			pstmt.setString(2, corn_id);
+
+			rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				return_code = true;
+
+			} else {
+				return_code = false;
+			}
+
+		} catch (SQLException e) {
+
+			System.out.println("좋아요 확인에 실패했습니다.");
+			return_code = false;
+			e.printStackTrace();
+
+		} finally {
+
+			if (pstmt != null)
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+		}
+
+		return return_code;
+	}
 	// 회원 좋아요
 	public void updateLike(Corn corn) {
 
@@ -898,9 +940,77 @@ public class PopCornDAO {
 		}
 
 	}
+	
+	public int deleteLike(Pop pop,Corn corn) {
+		PreparedStatement pstmt = null;
 
+		int return_code=-1;
+		try {
+			pstmt = connection.prepareStatement("delete from pop_like where pop_id = ? and corn_id = ?");
+
+			pstmt.setInt(1, pop.getId());
+			pstmt.setString(2, corn.getId());
+
+			pstmt.executeUpdate();
+			
+			updateLike(pop,-1);
+			return_code=0;
+
+		} catch (SQLException e) {
+
+			System.out.println("좋아요 취소에 실패했습니다.");
+			e.printStackTrace();
+			return_code=1;
+		} finally {
+
+			if (pstmt != null)
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+		}
+		
+		return return_code;
+	}
+	
+
+	public int insertLike(Pop pop,Corn corn) {
+		PreparedStatement pstmt = null;
+
+		int return_code=-1;
+		try {
+			pstmt = connection.prepareStatement("insert into pop_like values(?,?) ");
+
+			pstmt.setInt(1, pop.getId());
+			pstmt.setString(2, corn.getId());
+
+			pstmt.executeUpdate();
+			
+			updateLike(pop,1);
+			return_code=0;
+
+		} catch (SQLException e) {
+
+			System.out.println("좋아요 등록에 실패했습니다.");
+			e.printStackTrace();
+			return_code=1;
+		} finally {
+
+			if (pstmt != null)
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+		}
+		
+		return return_code;
+
+	}
+	
 	// 게시글 좋아요
-	public void updateLike(Pop pop) {
+	public void updateLike(Pop pop,int order) {
 
 		PreparedStatement pstmt = null;
 
@@ -908,7 +1018,7 @@ public class PopCornDAO {
 			pstmt = connection.prepareStatement("update pop set like_num = ? where id = ?");
 
 			pstmt.setInt(2, pop.getId());
-			pstmt.setInt(1, pop.getLike_num() + 1);
+			pstmt.setInt(1, pop.getLike_num() + order);
 
 			pstmt.executeUpdate();
 
@@ -931,7 +1041,7 @@ public class PopCornDAO {
 	// 로그인
 	// 0->성공 1->비밀번호 틀림 2->없음 3->실패
 	public int checkCorn(Corn corn) {
-
+		
 		PreparedStatement pstmt = null;
 
 		ResultSet rs = null;

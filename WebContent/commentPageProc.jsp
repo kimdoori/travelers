@@ -21,6 +21,7 @@
 
 		String user_id = (String) session.getAttribute("user_id");
 		boolean isLogin = false;
+		boolean like = false;
 		if (user_id != null)
 			isLogin = true;
 		int id = Integer.parseInt(request.getParameter("id"));
@@ -34,6 +35,8 @@
 			//out.println("<script> window.history.back();</script>");
 
 		} else {//성공
+			
+			like = dao.isLike(id,user_id);
 	%>
 
 	<div class="content-profile-page">
@@ -75,7 +78,16 @@
 
 
 					<p>
-						<a href="like.jsp">♡</a> &nbsp;<%=pop.getLike_num()%></p>
+						<a href="like.jsp?like=<%=like %>&pop_id=<%=pop.getId()%>&corn_id=<%=user_id%>">
+					<%
+						if(isLogin && like)
+							out.println("♥");
+						else
+							out.println("♡");
+
+					
+					%>
+					</a> &nbsp;<%=pop.getLike_num()%></p>
 					<form action="writeComment.jsp">
 						<input type="hidden" name="pop_id" value=<%=pop.getId()%>>
 						<input type="text" placeholder="댓글을 입력하세요." name="comment"
