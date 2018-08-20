@@ -325,7 +325,7 @@ public class PopCornDAO {
 	}
 
 	// 회원 등록
-	// 0-> 성공 1->이미 있는 회원 40->실패
+	// 0-> 성공 	1->이미 있는 회원	2->실패
 	public int insertCorn(Corn corn) {
 
 		PreparedStatement pstmt = null;
@@ -349,6 +349,7 @@ public class PopCornDAO {
 		} catch (SQLException e) {
 
 			System.out.println("회원 등록에 실패했습니다.");
+				return_code = 2;
 
 			if (e.getErrorCode() == 1062) {// 이미 있는 회원
 				return_code = 1;
@@ -699,7 +700,8 @@ public class PopCornDAO {
 
 	}
 
-	// 로그인 0->성공 1->비밀번호 틀림 2->없음 40->실패
+	// 로그인 
+	//0->성공 	1->비밀번호 틀림 	2->없음 		3->실패
 	public int checkCorn(Corn corn) {
 
 		PreparedStatement pstmt = null;
@@ -729,7 +731,7 @@ public class PopCornDAO {
 		} catch (SQLException e) {
 
 			System.out.println("로그인 확인에 실패했습니다.");
-			return_code = 40;
+			return_code = 3;
 			e.printStackTrace();
 
 		} finally {

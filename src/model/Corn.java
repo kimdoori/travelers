@@ -61,6 +61,24 @@ public class Corn {
 	public Corn() {
 		super();
 	}
+	
+	
+	public Corn(String id, String pw) {
+		super();
+		this.id = id;
+		this.pw = pw;
+	}
+	
+	
+	public Corn(String id, String pw, String name, String nickname, String birth, String phone) {
+		super();
+		this.id = id;
+		this.pw = pw;
+		this.name = name;
+		this.nickname = nickname;
+		this.birth = birth;
+		this.phone = phone;
+	}
 	public Corn(String id, String pw, String name, String nickname, String birth, String phone, int like_num) {
 		super();
 		this.id = id;

@@ -4,14 +4,12 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>계정 페이지</title>
+<title>Insert title here</title>
 </head>
 <body>
-<form action="logout.jsp">
-	<input type="submit" value="로그아웃">
-</form>
-
-
-
+<%
+	session.invalidate();
+	response.sendRedirect("index.jsp");
+%>
 </body>
 </html>
