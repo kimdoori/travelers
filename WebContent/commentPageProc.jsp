@@ -90,7 +90,11 @@
 								for (Comment comment : list) {
 					%>
 					<div class="comment">
+					<%
+						if(isLogin && user_id.equals(comment.getCorn_id()))
+					%>
 						<a href="deleteComment.jsp?pop_id=<%=pop.getId() %>&id=<%=comment.getId()%>"><span style="float: right;">&times;</span></a>
+						
 						<h5><%=comment.getCorn_name()%></h5>
 						<p><%=comment.getReg_date()%></p>
 						<h6><%=comment.getComment()%></h6>
