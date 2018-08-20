@@ -75,7 +75,7 @@
 		<div class="profile-user-page card">
 			<div class="user-profile-data">
 				<section style="text-align: right;">
-					<a href="deleteAll.jsp" id="write">전체 삭제하기</a>
+					<a href="deleteAll.jsp?corn_id=<%=user_id %>" id="write">전체 삭제하기</a>
 				</section>
 				<section>
 					<%
@@ -84,8 +84,39 @@
 								out.println("게시한 POP이 없습니다.");
 							} else {
 								for (Pop pop : list) {
-									out.println("<div>" + pop.getTitle() + "</div>");
+					%>
+
+					<div class="pop">
+						<p class="extra"><a href="modifyPop.jsp">수정하기</a><a href="modifyPop.jsp">&times;</a></p>
+						<h6><%=pop.getCorn_name()%>님의 POP입니다. ---
+							<%=pop.getLocation()%>
+							여행
+						</h6>
+						<h3>
+							<%=pop.getTitle()%>
+						</h3>
+						<p>
+							<%=pop.getReg_Date()%></p>
+						<h5>
+							<%=pop.getContent()%></h5>
+
+						<%
+							String[] photo = pop.getPhoto();
+							for (int i = 0; i < photo.length; i++) {
+								if (photo[i] != null) {
+									out.println("<img src='"+photo[i]+"'class='pop-img'><br><br>");
 								}
+							}
+						%>
+						
+
+					<p>♡ &nbsp;<%=pop.getLike_num() %></p>
+					<a href="writePage.jsp" id="write">댓글 작성하기</a>
+					
+
+					</div>
+					<%
+						}
 							}
 					%>
 

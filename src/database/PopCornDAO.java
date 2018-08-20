@@ -54,12 +54,12 @@ public class PopCornDAO {
 
 	// 게시글 추가 함수
 	// 0-> 성공 1->실패
-	public int insertPop(Pop pop,String corn_id) {
+	public int insertPop(Pop pop, String corn_id) {
 
 		PreparedStatement pstmt = null;
 		PreparedStatement pstmt2 = null;
 		ResultSet rs = null;
-		
+
 		int return_code = -1;
 
 		try {
@@ -68,21 +68,24 @@ public class PopCornDAO {
 			pstmt.setString(2, pop.getTitle());
 			pstmt.setString(3, pop.getLocation());
 			pstmt.setString(4, pop.getContent());
-			
+
 			pstmt.executeUpdate();
-			
+
 			pstmt2 = connection.prepareStatement("SELECT LAST_INSERT_ID();");
 			rs = pstmt2.executeQuery();
-			
-			String[] photo = {pop.getPhoto1(),pop.getPhoto2(),pop.getPhoto3()};
+
+			String[] photo = pop.getPhoto();
 
 			if (rs.next()) {
 
 				int id = rs.getInt("LAST_INSERT_ID()");
-				for(int i=0;i<3;i++) { 
-					if(photo[i].equals("") )
+				for (int i = 0; i < 3; i++) {
+					System.out.println(id);
+					System.out.println(photo[i]);
+					
+					if (photo[i].equals(""))
 						continue;
-					insertPopPhoto(photo[i],id);
+					insertPopPhoto(photo[i], id);
 				}
 
 			}
@@ -93,7 +96,7 @@ public class PopCornDAO {
 
 			System.out.println("게시글 추가에 실패했습니다.");
 			e.printStackTrace();
-			return_code=1;
+			return_code = 1;
 
 		} finally {
 
@@ -103,33 +106,38 @@ public class PopCornDAO {
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
+			if (pstmt2 != null)
+				try {
+					pstmt2.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
 		}
 		return return_code;
 
 	}
-	
-	public int insertPopPhoto(String photo,int id) {
+
+	public int insertPopPhoto(String photo, int id) {
 
 		PreparedStatement pstmt = null;
 
 		int return_code = -1;
 
 		try {
-			pstmt = connection.prepareStatement("insert into pop_deatil values(?,?)");
+			pstmt = connection.prepareStatement("insert into pop_detail values(?,?)");
 
 			pstmt.setInt(1, id);
 			pstmt.setString(2, photo);
-		
+
 			pstmt.executeUpdate();
-			
-			
+
 			return_code = 0;
 
 		} catch (SQLException e) {
 
 			System.out.println("사진 추가에 실패했습니다.");
 			e.printStackTrace();
-			return_code=1;
+			return_code = 1;
 
 		} finally {
 
@@ -181,9 +189,10 @@ public class PopCornDAO {
 	public void deleteAllPop(String corn_id) {
 
 		PreparedStatement pstmt = null;
+		
 
 		try {
-
+			
 			pstmt = connection.prepareStatement("delete from pop where corn_id = ?");
 
 			pstmt.setString(1, corn_id);
@@ -257,6 +266,7 @@ public class PopCornDAO {
 			if (rs.next()) {
 
 				pop.setId(rs.getInt("id"));
+				pop.setCorn_name(rs.getString("corn_id"));
 				pop.setTitle(rs.getString("title"));
 				pop.setLocation(rs.getString("location"));
 				pop.setContent(rs.getString("content"));
@@ -305,11 +315,15 @@ public class PopCornDAO {
 				Pop pop = new Pop();
 
 				pop.setId(rs.getInt("id"));
+				pop.setCorn_name(rs.getString("corn_id"));
 				pop.setTitle(rs.getString("title"));
 				pop.setLocation(rs.getString("location"));
 				pop.setContent(rs.getString("content"));
 				pop.setLike_num(rs.getInt("like_num"));
 				pop.setReg_Date(rs.getString("reg_date"));
+				
+				
+				
 
 				list.add(pop);
 
@@ -338,8 +352,14 @@ public class PopCornDAO {
 	public List<Pop> selectAllPop(String corn_id) {
 
 		PreparedStatement pstmt = null;
+		PreparedStatement pstmt2 = null;
+		PreparedStatement pstmt3 = null;
+		
 
 		ResultSet rs = null;
+		ResultSet rs2 = null;
+		ResultSet rs3 = null;
+		
 
 		List<Pop> list = new ArrayList<Pop>();
 
@@ -350,19 +370,41 @@ public class PopCornDAO {
 
 			rs = pstmt.executeQuery();
 
-			while (rs.next())
+			while (rs.next()) {
 
-			{
-				Pop pop = new Pop();
+				pstmt2 = connection.prepareStatement("select * from corn where id = ?");
+				pstmt2.setString(1, rs.getString("corn_id"));
+				rs2 = pstmt2.executeQuery();
 
-				pop.setId(rs.getInt("id"));
-				pop.setTitle(rs.getString("title"));
-				pop.setLocation(rs.getString("location"));
-				pop.setContent(rs.getString("content"));
-				pop.setLike_num(rs.getInt("like_num"));
-				pop.setReg_Date(rs.getString("reg_date"));
+				if (rs2.next()) {
 
-				list.add(pop);
+					Pop pop = new Pop();
+
+					pop.setId(rs.getInt("id"));
+					pop.setCorn_id(rs.getString("corn_id"));
+					pop.setCorn_name(rs2.getString("name"));
+					pop.setTitle(rs.getString("title"));
+					pop.setLocation(rs.getString("location"));
+					pop.setContent(rs.getString("content"));
+					pop.setLike_num(rs.getInt("like_num"));
+					pop.setReg_Date(rs.getString("reg_date"));
+					
+					pstmt3 = connection.prepareStatement("select * from pop_detail where id = ?");
+					pstmt3.setInt(1, rs.getInt("id"));
+					rs3 = pstmt3.executeQuery();
+					
+					String[] photo = new String[3];
+					int i = 0;
+					while (rs3.next()) {
+						photo[i]=rs3.getString("photo");
+						i++;
+					}
+					pop.setPhoto(photo);
+
+					list.add(pop);
+
+
+				}
 
 			}
 
@@ -379,7 +421,15 @@ public class PopCornDAO {
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
+			if (pstmt2 != null)
+				try {
+					pstmt2.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+		
 		}
+		
 
 		return list;
 

@@ -17,15 +17,19 @@
 		String title = request.getParameter("title");
 		String location = request.getParameter("location");
 		String content = request.getParameter("content");
+		String[] photo = new String[3];
 		String photo1 = request.getParameter("photo1");
-		photo1 = photo1 == null ? "" : "image/"+photo1;
+		photo[0] = photo1 == null || photo1.equals("") ? "" : "image/"+photo1;
 		String photo2 = request.getParameter("photo2");
-		photo2 = photo2 == null ? "" : "image/"+photo2;
+		photo[1] = photo2 == null || photo2.equals("") ? "" : "image/"+photo2;
 		String photo3 = request.getParameter("photo3");
-		photo3 = photo3 == null ? "" : "image/"+photo3;
+		photo[2] = photo3 == null || photo3.equals("") ? "" : "image/"+photo3;
+		
+		
 
 		
-		Pop pop = new Pop(title,location,content,0,photo1,photo2,photo3);
+		Pop pop = new Pop(title,location,content,0,photo);
+		
 		
 		System.out.println(pop);
 		
