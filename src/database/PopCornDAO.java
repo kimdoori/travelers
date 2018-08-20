@@ -63,7 +63,15 @@ public class PopCornDAO {
 		int return_code = -1;
 
 		try {
-			pstmt = connection.prepareStatement("insert into pop(corn_id,title,location,content) values(?,?,?,?)");
+			System.out.println(pop.getReg_Date());
+			if (pop.getReg_Date() == null || pop.getReg_Date().equals("")) {
+				pstmt = connection.prepareStatement("insert into pop(corn_id,title,location,content) values(?,?,?,?)");
+
+			} else {
+				pstmt = connection
+						.prepareStatement("insert into pop(corn_id,title,location,content,reg_date) values(?,?,?,?,?)");
+				pstmt.setString(5, pop.getReg_Date());
+			}
 			pstmt.setString(1, corn_id);
 			pstmt.setString(2, pop.getTitle());
 			pstmt.setString(3, pop.getLocation());
@@ -80,9 +88,9 @@ public class PopCornDAO {
 
 				int id = rs.getInt("LAST_INSERT_ID()");
 				for (int i = 0; i < 3; i++) {
-					System.out.println(id);
-					System.out.println(photo[i]);
-					
+					// System.out.println(id);
+					// System.out.println(photo[i]);
+
 					if (photo[i].equals(""))
 						continue;
 					insertPopPhoto(photo[i], id);
@@ -151,28 +159,22 @@ public class PopCornDAO {
 		return return_code;
 
 	}
-
-	// 게시글 업데이트 함수
-	public void updatePop(Pop pop) {
-
+	public void deletePopPhoto(int id) {
 		PreparedStatement pstmt = null;
 
 		try {
-			pstmt = connection.prepareStatement("update pop set title = ?, location = ?, "
 
-					+ "content = ? where id = ?");
+			pstmt = connection.prepareStatement("delete from pop_detail where id = ?");
 
-			pstmt.setInt(4, pop.getId());
-			pstmt.setString(1, pop.getTitle());
-			pstmt.setString(2, pop.getLocation());
-			pstmt.setString(3, pop.getContent());
+			pstmt.setInt(1, id);
 
 			pstmt.executeUpdate();
 
 		} catch (SQLException e) {
 
-			System.out.println("게시글 업데이트에 실패했습니다.");
+			System.out.println("사진 삭제에 실패했습니다.");
 			e.printStackTrace();
+
 		} finally {
 
 			if (pstmt != null)
@@ -182,17 +184,71 @@ public class PopCornDAO {
 					e.printStackTrace();
 				}
 		}
+	}
 
+	// 게시글 업데이트 함수
+	public int updatePop(Pop pop, String corn_id) {
+
+		PreparedStatement pstmt = null;
+		PreparedStatement pstmt2 = null;
+		ResultSet rs = null;
+
+		int return_code = -1;
+
+		try {
+			pstmt = connection.prepareStatement("update pop set title = ?,location = ?,content = ? where id = ?");
+
+			pstmt.setString(1, pop.getTitle());
+			pstmt.setString(2, pop.getLocation());
+			pstmt.setString(3, pop.getContent());
+			pstmt.setInt(4, pop.getId());
+
+			pstmt.executeUpdate();
+
+			String[] photo = pop.getPhoto();
+			
+			deletePopPhoto(pop.getId());
+
+			for (int i = 0; i < 3; i++) {
+				if (photo[i].equals(""))
+					continue;
+				insertPopPhoto(photo[i], pop.getId());
+
+			}
+
+			return_code = 0;
+
+		} catch (SQLException e) {
+
+			System.out.println("게시글 추가에 실패했습니다.");
+			e.printStackTrace();
+			return_code = 1;
+
+		} finally {
+
+			if (pstmt != null)
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			if (pstmt2 != null)
+				try {
+					pstmt2.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+		}
+		return return_code;
 	}
 
 	// 유저의 게시글 전체 삭제
 	public void deleteAllPop(String corn_id) {
 
 		PreparedStatement pstmt = null;
-		
 
 		try {
-			
+
 			pstmt = connection.prepareStatement("delete from pop where corn_id = ?");
 
 			pstmt.setString(1, corn_id);
@@ -321,9 +377,6 @@ public class PopCornDAO {
 				pop.setContent(rs.getString("content"));
 				pop.setLike_num(rs.getInt("like_num"));
 				pop.setReg_Date(rs.getString("reg_date"));
-				
-				
-				
 
 				list.add(pop);
 
@@ -354,18 +407,16 @@ public class PopCornDAO {
 		PreparedStatement pstmt = null;
 		PreparedStatement pstmt2 = null;
 		PreparedStatement pstmt3 = null;
-		
 
 		ResultSet rs = null;
 		ResultSet rs2 = null;
 		ResultSet rs3 = null;
-		
 
 		List<Pop> list = new ArrayList<Pop>();
 
 		try {
 
-			pstmt = connection.prepareStatement("select * from pop where corn_id = ?");
+			pstmt = connection.prepareStatement("select * from pop where corn_id = ? order by reg_date desc");
 			pstmt.setString(1, corn_id);
 
 			rs = pstmt.executeQuery();
@@ -388,21 +439,20 @@ public class PopCornDAO {
 					pop.setContent(rs.getString("content"));
 					pop.setLike_num(rs.getInt("like_num"));
 					pop.setReg_Date(rs.getString("reg_date"));
-					
+
 					pstmt3 = connection.prepareStatement("select * from pop_detail where id = ?");
 					pstmt3.setInt(1, rs.getInt("id"));
 					rs3 = pstmt3.executeQuery();
-					
+
 					String[] photo = new String[3];
 					int i = 0;
 					while (rs3.next()) {
-						photo[i]=rs3.getString("photo");
+						photo[i] = rs3.getString("photo");
 						i++;
 					}
 					pop.setPhoto(photo);
 
 					list.add(pop);
-
 
 				}
 
@@ -427,9 +477,8 @@ public class PopCornDAO {
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
-		
+
 		}
-		
 
 		return list;
 

@@ -30,8 +30,26 @@ public class Pop {
 		this.like_num = like_num;
 		this.photo = photo;
 	}
-
-
+	public Pop(int id,String title, String location, String content, int like_num, String[] photo) {
+		super();
+		this.id = id;
+		this.title = title;
+		this.location = location;
+		this.content = content;
+		this.like_num = like_num;
+		this.photo = photo;
+	}
+	public Pop(int id,String title, String location, String content, int like_num, String[] photo,String reg_Date) {
+		super();
+		this.id = id;
+		this.title = title;
+		this.location = location;
+		this.content = content;
+		this.like_num = like_num;
+		this.photo = photo;
+		this.reg_Date = reg_Date;
+		
+	}
 	public Pop(int id, String title, String location, String content, int like_num, String reg_Date) {
 		super();
 		this.id = id;

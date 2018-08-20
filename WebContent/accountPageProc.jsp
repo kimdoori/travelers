@@ -87,7 +87,7 @@
 					%>
 
 					<div class="pop">
-						<p class="extra"><a href="modifyPop.jsp">수정하기</a><a href="modifyPop.jsp">&times;</a></p>
+						<p class="extra"><a href="modifyPopPage.jsp?id=<%=pop.getId()%>">수정하기</a><a href="deletePop.jsp?id=<%=pop.getId()%>">&times;</a></p>
 						<h6><%=pop.getCorn_name()%>님의 POP입니다. ---
 							<%=pop.getLocation()%>
 							여행
