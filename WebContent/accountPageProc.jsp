@@ -23,7 +23,6 @@
 		PopCornDAO dao = PopCornDAO.getInstance();
 
 		Corn corn = dao.selectOneCorn(user_id);
-		System.out.println(corn);
 
 		if (corn == null) {//실패 
 			out.println("<script>alert('네트워크를 확인해주세요.');</script>");
@@ -45,7 +44,7 @@
 			</div>
 
 			<a href="modifyPage.jsp"><button id="floating">MODIFY</button></a>
-
+			
 			<div class="user-profile-data">
 				<h1><%=corn.getName()%></h1>
 				<p><%=corn.getNickname()%></p>
@@ -111,7 +110,7 @@
 						
 
 					<p>♡ &nbsp;<%=pop.getLike_num() %></p>
-					<a href="writePage.jsp" id="write">댓글 작성하기</a>
+					<a href="commentPage.jsp?id=<%=pop.getId() %>" id="write">댓글 작성하기</a>
 					
 
 					</div>

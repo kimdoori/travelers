@@ -27,7 +27,12 @@
 		
 		if(status_code==0){//성공	
 			out.println("로그인 성공");
+			corn = dao.selectOneCorn(user_id);
+
+		
 			session.setAttribute("user_id", user_id);
+			session.setAttribute("user_name", corn.getName());
+			
 	        //response.sendRedirect("accountPage.jsp");
 			out.println("<script> location.href='accountPage.jsp'</script>");
 
