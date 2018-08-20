@@ -24,9 +24,10 @@ public class PopCornDAO {
 			System.out.println("연결");
 
 			Class.forName("com.mysql.jdbc.Driver");
-			
-		  
-			connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/travelers?useUnicode=true&characterEncoding=utf8", "root", "doori0228!");
+
+			connection = DriverManager.getConnection(
+					"jdbc:mysql://localhost:3306/travelers?useUnicode=true&characterEncoding=utf8", "root",
+					"doori0228!");
 
 		} catch (SQLException e) {
 
@@ -324,9 +325,12 @@ public class PopCornDAO {
 	}
 
 	// 회원 등록
-	public void insertCorn(Corn corn) {
+	// 0-> 성공 1->이미 있는 회원 40->실패
+	public int insertCorn(Corn corn) {
 
 		PreparedStatement pstmt = null;
+
+		int return_code = -1;
 
 		try {
 			pstmt = connection.prepareStatement("insert into corn values(?,?,?,?,?,?,?)");
@@ -340,11 +344,16 @@ public class PopCornDAO {
 			pstmt.setInt(7, 0);
 
 			pstmt.executeUpdate();
+			return_code = 0;
 
 		} catch (SQLException e) {
 
 			System.out.println("회원 등록에 실패했습니다.");
-			e.printStackTrace();
+
+			if (e.getErrorCode() == 1062) {// 이미 있는 회원
+				return_code = 1;
+			}
+			// e.printStackTrace();
 
 		} finally {
 
@@ -355,6 +364,8 @@ public class PopCornDAO {
 					e.printStackTrace();
 				}
 		}
+
+		return return_code;
 
 	}
 
@@ -425,6 +436,57 @@ public class PopCornDAO {
 
 	}
 
+	// 모든 유저 조회
+	public List<Corn> selectAllCorn() {
+
+		PreparedStatement pstmt = null;
+
+		ResultSet rs = null;
+
+		List<Corn> list = new ArrayList<Corn>();
+
+		try {
+
+			pstmt = connection.prepareStatement("select * from corn");
+
+			rs = pstmt.executeQuery();
+
+			while (rs.next())
+
+			{
+				Corn corn = new Corn();
+				
+				corn.setId(rs.getString("id"));
+				corn.setPw(rs.getString("pw"));
+				corn.setName(rs.getString("name"));
+				corn.setNickname(rs.getString("nickname"));
+				corn.setBirth(rs.getString("birth"));
+				corn.setPhone(rs.getString("phone"));
+				corn.setLike_num(rs.getInt("like_num"));
+
+				list.add(corn);
+
+			}
+
+		} catch (SQLException e) {
+
+			System.out.println("모든 유저 조회에 실패했습니다.");
+			e.printStackTrace();
+
+		} finally {
+
+			if (pstmt != null)
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+		}
+
+		return list;
+
+	}
+
 	// 회원 조회
 	public Corn selectOneCorn(String corn_id) {
 
@@ -484,7 +546,8 @@ public class PopCornDAO {
 
 		try {
 
-			String sql = "select * from pop where title like '%"+keyword+"%' or location like '%"+keyword+"%' or content  '%"+keyword+"%'";
+			String sql = "select * from pop where title like '%" + keyword + "%' or location like '%" + keyword
+					+ "%' or content  '%" + keyword + "%'";
 
 			pstmt = connection.prepareStatement(sql);
 
@@ -524,7 +587,7 @@ public class PopCornDAO {
 		return list;
 
 	}
-	
+
 	public List<Corn> searchCorn(String keyword) {
 
 		PreparedStatement pstmt = null;
@@ -535,7 +598,8 @@ public class PopCornDAO {
 
 		try {
 
-			String sql = "select * from corn where id like '%"+keyword+"%' or name like '%"+keyword+"%' or nickname  '%"+keyword+"%'";
+			String sql = "select * from corn where id like '%" + keyword + "%' or name like '%" + keyword
+					+ "%' or nickname  '%" + keyword + "%'";
 
 			pstmt = connection.prepareStatement(sql);
 
@@ -553,7 +617,7 @@ public class PopCornDAO {
 				corn.setBirth(rs.getString("birth"));
 				corn.setPhone(rs.getString("phone"));
 				corn.setLike_num(rs.getInt("like_num"));
-				
+
 				list.add(corn);
 
 			}
@@ -576,108 +640,110 @@ public class PopCornDAO {
 		return list;
 
 	}
-	
+
 	// 회원 좋아요
 	public void updateLike(Corn corn) {
 
-			PreparedStatement pstmt = null;
+		PreparedStatement pstmt = null;
 
-			try {
-				pstmt = connection.prepareStatement("update corn set like_num = ? where id = ?");
+		try {
+			pstmt = connection.prepareStatement("update corn set like_num = ? where id = ?");
 
-				pstmt.setString(2, corn.getId());
-				pstmt.setInt(1, corn.getLike_num()+1);
+			pstmt.setString(2, corn.getId());
+			pstmt.setInt(1, corn.getLike_num() + 1);
 
-				pstmt.executeUpdate();
+			pstmt.executeUpdate();
 
-			} catch (SQLException e) {
+		} catch (SQLException e) {
 
-				System.out.println("회원 좋아요 업데이트에 실패했습니다.");
-				e.printStackTrace();
-			} finally {
+			System.out.println("회원 좋아요 업데이트에 실패했습니다.");
+			e.printStackTrace();
+		} finally {
 
-				if (pstmt != null)
-					try {
-						pstmt.close();
-					} catch (SQLException e) {
-						e.printStackTrace();
-					}
-			}
-
-		}
-	// 게시글 좋아요
-		public void updateLike(Pop pop) {
-
-				PreparedStatement pstmt = null;
-
+			if (pstmt != null)
 				try {
-					pstmt = connection.prepareStatement("update pop set like_num = ? where id = ?");
-
-					pstmt.setInt(2, pop.getId());
-					pstmt.setInt(1, pop.getLike_num()+1);
-
-					pstmt.executeUpdate();
-
+					pstmt.close();
 				} catch (SQLException e) {
-
-					System.out.println("게시글 좋아요 업데이트에 실패했습니다.");
 					e.printStackTrace();
-				} finally {
-
-					if (pstmt != null)
-						try {
-							pstmt.close();
-						} catch (SQLException e) {
-							e.printStackTrace();
-						}
 				}
-
-			}
-
-	// 로그인 0->성공  1->비밀번호 틀림  2->없음
-		public int checkCorn(Corn corn) {
-
-			PreparedStatement pstmt = null;
-
-			ResultSet rs = null;
-			
-			int return_code = -1;
-
-			try {
-
-				pstmt = connection.prepareStatement("select * from corn where id = ?");
-
-				pstmt.setString(1, corn.getId());
-
-				rs = pstmt.executeQuery();
-
-				if (rs.next()) {
-					if(corn.getPw().equals(rs.getString("pw")))
-						return_code=0;	
-					else
-						return_code=1;
-
-				}else {
-					return_code=2;
-				}
-
-			} catch (SQLException e) {
-
-				System.out.println("로그인 확인에 실패했습니다.");
-				e.printStackTrace();
-
-			} finally {
-
-				if (pstmt != null)
-					try {
-						pstmt.close();
-					} catch (SQLException e) {
-						e.printStackTrace();
-					}
-			}
-
-			return return_code;
-
 		}
+
+	}
+
+	// 게시글 좋아요
+	public void updateLike(Pop pop) {
+
+		PreparedStatement pstmt = null;
+
+		try {
+			pstmt = connection.prepareStatement("update pop set like_num = ? where id = ?");
+
+			pstmt.setInt(2, pop.getId());
+			pstmt.setInt(1, pop.getLike_num() + 1);
+
+			pstmt.executeUpdate();
+
+		} catch (SQLException e) {
+
+			System.out.println("게시글 좋아요 업데이트에 실패했습니다.");
+			e.printStackTrace();
+		} finally {
+
+			if (pstmt != null)
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+		}
+
+	}
+
+	// 로그인 0->성공 1->비밀번호 틀림 2->없음 40->실패
+	public int checkCorn(Corn corn) {
+
+		PreparedStatement pstmt = null;
+
+		ResultSet rs = null;
+
+		int return_code = -1;
+
+		try {
+
+			pstmt = connection.prepareStatement("select * from corn where id = ?");
+
+			pstmt.setString(1, corn.getId());
+
+			rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				if (corn.getPw().equals(rs.getString("pw")))
+					return_code = 0;
+				else
+					return_code = 1;
+
+			} else {
+				return_code = 2;
+			}
+
+		} catch (SQLException e) {
+
+			System.out.println("로그인 확인에 실패했습니다.");
+			return_code = 40;
+			e.printStackTrace();
+
+		} finally {
+
+			if (pstmt != null)
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+		}
+
+		return return_code;
+
+	}
 
 }

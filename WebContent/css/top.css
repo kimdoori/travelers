@@ -5,8 +5,6 @@ margin:0px;
 }
 
 
-
-
 .navbar {
   overflow: hidden;
   background-color: #333;
@@ -28,4 +26,11 @@ margin:0px;
 .navbar a:hover {
   background: #ddd;
   color: black;
+}
+
+.leff{
+	float:left;
+}
+.right{
+	float:right;
 }

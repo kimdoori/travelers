@@ -15,9 +15,14 @@
 %>
 
 <div class="navbar">
-  <a href="#home">Home</a>
-  <a href="#news">News</a>
-  <a href="#contact">Contact</a>
+<div class="left">
+  <a href="index.jsp">MAIN</a>
+  <a href="listPop.jsp">POP</a>
+  <a href="listCorn.jsp">CORN</a>
+</div>
+<div class="right">
+  <a href="accountPage.jsp">계정</a>
+</div>
 </div>
 
 

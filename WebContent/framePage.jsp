@@ -23,8 +23,8 @@ body, html {
 	-moz-osx-font-smoothing: grayscale;
 }
 #main{
-  padding: 16px;
-  margin-top: 30px;
+  padding-top:0px;
+  margin-top: 50px;
   }
 </style>
 </head>
