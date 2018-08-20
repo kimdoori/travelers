@@ -5,7 +5,7 @@
 
 html {
   position: relative;
-  background: #8000ff;/* // #FF4081; */
+ /*  background: #8000ff;// #FF4081; */
   font-family: 'Roboto', sans-serif;
   
 }
@@ -92,14 +92,14 @@ body{
   font-weight: 400;
   font-size: 24px;
   text-align: center;
-  color: #8000ff;
+  color: #FF5A22;
   margin: 15px auto;
 }
 .panel-lite a {
   display: inline-block;
   margin-top: 25px;
   text-decoration: none;
-  color: #8000ff;
+  color: #FF5A22;
   font-size: 14px;
 }
 
@@ -134,9 +134,9 @@ body{
 }
 .form-group .form-control:focus, .form-group .form-control:valid {
   outline: none;
-  color: #8000ff;
-  box-shadow: 0 1px #8000ff;
-  border-color: #8000ff;
+  color: #485b6e;
+  box-shadow: 0 1px #FF5A22;
+  border-color: #FF5A22;
 }
 .form-group .form-control:focus + .form-label, .form-group .form-control:valid + .form-label {
   font-size: 12px;
@@ -145,7 +145,7 @@ body{
 }
 
 .floating-btn {
-  background: #8000ff;
+  background: #485b6e;
   width: 60px;
   height: 60px;
   border-radius: 50%;

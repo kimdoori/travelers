@@ -9,6 +9,7 @@ public class Corn {
 	private String birth;
 	private String phone;
 	private int like_num;
+	private int pop_num;
 	
 	
 	
@@ -58,6 +59,12 @@ public class Corn {
 	
 	
 	
+	public int getPop_num() {
+		return pop_num;
+	}
+	public void setPop_num(int pop_num) {
+		this.pop_num = pop_num;
+	}
 	public Corn() {
 		super();
 	}
@@ -89,11 +96,28 @@ public class Corn {
 		this.phone = phone;
 		this.like_num = like_num;
 	}
+	
+	
+	
+	public Corn(String id, String pw, String name, String nickname, String birth, String phone, int like_num,
+			int pop_num) {
+		super();
+		this.id = id;
+		this.pw = pw;
+		this.name = name;
+		this.nickname = nickname;
+		this.birth = birth;
+		this.phone = phone;
+		this.like_num = like_num;
+		this.pop_num = pop_num;
+	}
 	@Override
 	public String toString() {
 		return "Corn [id=" + id + ", pw=" + pw + ", name=" + name + ", nickname=" + nickname + ", birth=" + birth
-				+ ", phone=" + phone + ", like_num=" + like_num + "]";
+				+ ", phone=" + phone + ", like_num=" + like_num + ", pop_num=" + pop_num + "]";
 	}
+	
+	
 	
 	
 	

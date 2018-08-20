@@ -21,6 +21,8 @@ body, html {
 	font-family: "Roboto", sans-serif;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+	background: #485b6e;
+	
 }
 #main{
   padding-top:0px;
