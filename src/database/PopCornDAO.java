@@ -21,13 +21,20 @@ public class PopCornDAO {
 	private PopCornDAO() {
 
 		try {
+			System.out.println("연결");
 
-			connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/travelers", "root", "doori0228!");
+			Class.forName("com.mysql.jdbc.Driver");
+			
+		  
+			connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/travelers?useUnicode=true&characterEncoding=utf8", "root", "doori0228!");
 
 		} catch (SQLException e) {
 
-			// FIXME Auto-generated catch block
+			System.out.println("데이터베이스 연결에 실패했습니다.");
+			e.printStackTrace();
 
+		} catch (ClassNotFoundException e) {
+			System.out.println("클래스가 없습니디ㅏ.");
 			e.printStackTrace();
 
 		}
