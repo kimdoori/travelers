@@ -28,7 +28,7 @@
 				PopCornDAO dao = PopCornDAO.getInstance();
 				List<Corn> list = dao.selectAllCorn(type, corn_id);
 				if (list.isEmpty()) {
-					out.println("해당하는 CORN회원이  없습니다.");
+					out.println("<div class='pop' style='text-align:center;'>해당하는 CORN회원이  없습니다.</div>");
 				} else {
 					for (Corn corn : list) {
 			%>

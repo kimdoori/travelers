@@ -82,7 +82,8 @@
 					<%
 						List<Pop> list = dao.selectAllPop(user_id);
 							if (list.isEmpty()) {
-								out.println("게시한 POP이 없습니다.");
+								
+								out.println("<div class='pop'>게시한 POP이 없습니다.</div>");
 							} else {
 								for (Pop pop : list) {
 					%>

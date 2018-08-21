@@ -15,6 +15,7 @@ public class Pop {
 	
 	
 	private String reg_Date;
+	private int comment_num;
 	
 	
 	
@@ -127,6 +128,14 @@ public class Pop {
 
 
 
+
+	public int getComment_num() {
+		return comment_num;
+	}
+
+	public void setComment_num(int comment_num) {
+		this.comment_num = comment_num;
+	}
 
 	public void setPhoto(String[] photo) {
 		this.photo = photo;

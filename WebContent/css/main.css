@@ -8,18 +8,30 @@ body, html {
 #logo a {
 	font-family: 'Bangers', cursive;
 	text-decoration: none;
-	font-size: 2.2em;
+	font-size: 3.5em;
 	color: white;
+	
 }
-
+#logo p{
+	font-family: 'Bangers', cursive;
+	margin-top:-0.5em;
+	font-size: 2em;
+	color: #c0c0c0;
+}
+#logo{
+	padding-top:15%;
+	text-shadow:1px 1px 2px #808080;
+	
+}
 #search-section {
 	box-sizing: border-box;
 	background-image: url(../image/travel7.jpg);
-	height: 1080px;
+	height: 1000px;
 	width: 100%;
 }
 
 form.search input[type=text] {
+	color:white;
 	border-radius: 2em 0em 0em 2em;
 	height: 3em;
 	padding: 10px;

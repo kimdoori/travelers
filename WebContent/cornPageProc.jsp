@@ -93,7 +93,7 @@
 					<%
 						List<Pop> list = dao.selectAllPop(corn_id);
 							if (list.isEmpty()) {
-								out.println("게시한 POP이 없습니다.");
+								out.println("<div class='pop' style='text-align:center;'>게시한 POP이 없습니다.</div>");
 							} else {
 								for (Pop pop : list) {
 					%>
