@@ -3,9 +3,7 @@
 
 .container {
   max-width: 500px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 10%;
+  margin: 4em auto;
 }
 
 h1 {
@@ -21,7 +19,7 @@ h2 {
   font-size: 14px;
   text-align: center;
   font-weight: 700;
-  margin-bottom: 50px;
+  margin-bottom: 40px;
 }
 
 .service-details {

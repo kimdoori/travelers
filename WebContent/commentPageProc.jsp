@@ -49,7 +49,7 @@
 				<div class="pop">
 
 					<%
-						if (isLogin) {
+						if(isLogin && user_id.equals(pop.getCorn_id())){
 								out.println("<p class='extra'><a href='modifyPopPage.jsp?id=" + pop.getId() + "'>수정하기</a>");
 								out.println("<a href='deletePop.jsp?id='" + pop.getId() + "'>&times;</a></p>");
 							}

@@ -88,7 +88,8 @@ a {
 	{
 	text-align: center;
 	padding: 0 1.5em;
-
+	display:inline-block;
+	width:45%;
 }
 
 .profile-user-page .user-profile-data h1 {

@@ -17,23 +17,20 @@
 </head>
 <body>
 	<%
-		String user_id = (String) session.getAttribute("user_id");
-		PopCornDAO dao = PopCornDAO.getInstance();
-		List<Corn> list = dao.selectAllCorn();
-		if (list.isEmpty()) {
-			out.println("회원이 없습니다.");
-		} else {
+		String corn_id = request.getParameter("corn_id");
+		String type = request.getParameter("type");
 	%>
 
 	<div class="content-profile-page">
 		<div class="profile-user-page card">
 
 			<%
-				for (Corn corn : list) {
-						if (user_id != null && user_id.equals(corn.getId())) {
-							//out.println("다른 CORN 회원이 없습니다.");
-							continue;
-						}
+				PopCornDAO dao = PopCornDAO.getInstance();
+				List<Corn> list = dao.selectAllCorn(type, corn_id);
+				if (list.isEmpty()) {
+					out.println("해당하는 CORN회원이  없습니다.");
+				} else {
+					for (Corn corn : list) {
 			%>
 			<div class="user-profile-data">
 

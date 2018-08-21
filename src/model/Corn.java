@@ -10,9 +10,16 @@ public class Corn {
 	private String phone;
 	private int like_num;
 	private int pop_num;
+	private int mylike_num;
 	
 	
 	
+	public int getMylike_num() {
+		return mylike_num;
+	}
+	public void setMylike_num(int mylike_num) {
+		this.mylike_num = mylike_num;
+	}
 	public String getId() {
 		return id;
 	}
@@ -65,6 +72,8 @@ public class Corn {
 	public void setPop_num(int pop_num) {
 		this.pop_num = pop_num;
 	}
+	
+	
 	public Corn() {
 		super();
 	}

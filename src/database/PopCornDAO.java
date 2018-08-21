@@ -692,6 +692,9 @@ public class PopCornDAO {
 				corn.setBirth(rs.getString("birth"));
 				corn.setPhone(rs.getString("phone"));
 				corn.setLike_num(rs.getInt("like_num"));
+				corn.setPop_num(getPopCount(rs.getString("id")));
+				corn.setMylike_num(getMyLikeCount(rs.getString("id")));
+
 
 				list.add(corn);
 
@@ -742,6 +745,9 @@ public class PopCornDAO {
 				corn.setBirth(rs.getString("birth"));
 				corn.setPhone(rs.getString("phone"));
 				corn.setLike_num(rs.getInt("like_num"));
+				corn.setPop_num(getPopCount(rs.getString("id")));
+				corn.setMylike_num(getMyLikeCount(rs.getString("id")));
+
 
 			}
 
@@ -869,7 +875,47 @@ public class PopCornDAO {
 		return list;
 
 	}
+	public boolean isLike(String like_corn_id,String corn_id) {
+		PreparedStatement pstmt = null;
 
+		ResultSet rs = null;
+
+		boolean return_code = false;
+
+		try {
+
+			pstmt = connection.prepareStatement("select * from corn_like where like_corn_id = ? and corn_id = ?");
+
+			pstmt.setString(1, like_corn_id);
+			pstmt.setString(2, corn_id);
+
+			rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				return_code = true;
+
+			} else {
+				return_code = false;
+			}
+
+		} catch (SQLException e) {
+
+			System.out.println("좋아요 확인에 실패했습니다.");
+			return_code = false;
+			e.printStackTrace();
+
+		} finally {
+
+			if (pstmt != null)
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+		}
+
+		return return_code;
+	}
 	
 	public boolean isLike(int pop_id,String corn_id) {
 		PreparedStatement pstmt = null;
@@ -912,35 +958,112 @@ public class PopCornDAO {
 
 		return return_code;
 	}
-	// 회원 좋아요
-	public void updateLike(Corn corn) {
-
-		PreparedStatement pstmt = null;
-
-		try {
-			pstmt = connection.prepareStatement("update corn set like_num = ? where id = ?");
-
-			pstmt.setString(2, corn.getId());
-			pstmt.setInt(1, corn.getLike_num() + 1);
-
-			pstmt.executeUpdate();
-
-		} catch (SQLException e) {
-
-			System.out.println("회원 좋아요 업데이트에 실패했습니다.");
-			e.printStackTrace();
-		} finally {
-
-			if (pstmt != null)
-				try {
-					pstmt.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-		}
-
-	}
 	
+	// --회원 좋아요
+		public int deleteLike(Corn like_corn,Corn corn) {
+			PreparedStatement pstmt = null;
+
+			int return_code=-1;
+			try {
+				pstmt = connection.prepareStatement("delete from corn_like where like_corn_id = ? and corn_id = ?");
+				
+
+				pstmt.setString(1, like_corn.getId());
+				pstmt.setString(2, corn.getId());
+
+				pstmt.executeUpdate();
+				
+				updateLike(like_corn,-1);
+				return_code=0;
+
+			} catch (SQLException e) {
+
+				System.out.println("좋아요 취소에 실패했습니다.");
+				e.printStackTrace();
+				return_code=1;
+			} finally {
+
+				if (pstmt != null)
+					try {
+						pstmt.close();
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+			}
+			
+			return return_code;
+		}
+		
+
+		public int insertLike(Corn like_corn,Corn corn) {
+			PreparedStatement pstmt = null;
+
+			int return_code=-1;
+			try {
+				pstmt = connection.prepareStatement("insert into corn_like values(?,?) ");
+
+				pstmt.setString(1, like_corn.getId());
+				pstmt.setString(2, corn.getId());
+
+				pstmt.executeUpdate();
+				
+				updateLike(like_corn,1);
+				return_code=0;
+
+			} catch (SQLException e) {
+
+				System.out.println("좋아요 등록에 실패했습니다.");
+				e.printStackTrace();
+				return_code=1;
+			} finally {
+
+				if (pstmt != null)
+					try {
+						pstmt.close();
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+			}
+			
+			return return_code;
+
+		}
+		
+		
+		public void updateLike(Corn corn,int order) {
+
+			PreparedStatement pstmt = null;
+
+			try {
+				pstmt = connection.prepareStatement("update corn set like_num = ? where id = ?");
+
+				pstmt.setString(2, corn.getId());
+				pstmt.setInt(1, corn.getLike_num() + order);
+
+				pstmt.executeUpdate();
+
+			} catch (SQLException e) {
+
+				System.out.println("회원 좋아요 업데이트에 실패했습니다.");
+				e.printStackTrace();
+			} finally {
+
+				if (pstmt != null)
+					try {
+						pstmt.close();
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+			}
+
+		}
+		// --회원 좋아요
+	
+	
+	
+	
+	
+	// --게시글 좋아요
 	public int deleteLike(Pop pop,Corn corn) {
 		PreparedStatement pstmt = null;
 
@@ -1009,7 +1132,7 @@ public class PopCornDAO {
 
 	}
 	
-	// 게시글 좋아요
+	
 	public void updateLike(Pop pop,int order) {
 
 		PreparedStatement pstmt = null;
@@ -1037,6 +1160,9 @@ public class PopCornDAO {
 		}
 
 	}
+	// --게시글 좋아요
+
+	
 
 	// 로그인
 	// 0->성공 1->비밀번호 틀림 2->없음 3->실패
@@ -1209,4 +1335,128 @@ public class PopCornDAO {
 			}
 
 		}
+		public int getPopCount(String corn_id) {
+			PreparedStatement pstmt = null;
+
+			ResultSet rs = null;
+
+			int num = 0;
+
+			try {
+
+				pstmt = connection.prepareStatement("select count(*) from pop where corn_id = ?");
+
+				pstmt.setString(1, corn_id);
+
+				rs = pstmt.executeQuery();
+
+				if (rs.next()) {
+					num = rs.getInt("count(*)");
+					
+				}
+
+			} catch (SQLException e) {
+
+				System.out.println("좋아요 확인에 실패했습니다.");
+				e.printStackTrace();
+
+			} finally {
+
+				if (pstmt != null)
+					try {
+						pstmt.close();
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+			}
+
+			return num;
+		}
+		public int getMyLikeCount(String corn_id) {
+			PreparedStatement pstmt = null;
+
+			ResultSet rs = null;
+
+			int num = 0;
+
+			try {
+
+				pstmt = connection.prepareStatement("select count(*) from corn_like where corn_id = ?");
+
+				pstmt.setString(1, corn_id);
+
+				rs = pstmt.executeQuery();
+
+				if (rs.next()) {
+					num = rs.getInt("count(*)");
+					
+				}
+
+			} catch (SQLException e) {
+
+				System.out.println("좋아요 확인에 실패했습니다.");
+				e.printStackTrace();
+
+			} finally {
+
+				if (pstmt != null)
+					try {
+						pstmt.close();
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+			}
+
+			return num;
+		}
+		
+		// 좋아요 유저 조회
+		public List<Corn> selectAllCorn(String type,String corn_id) {
+			//type : like_corn_id(like me) 	corn_id(my like)
+
+			PreparedStatement pstmt = null;
+
+			ResultSet rs = null;
+
+			List<Corn> list = new ArrayList<Corn>();
+
+			try {
+
+				pstmt = connection.prepareStatement("select * from corn_like where "+type+" = ?");
+				pstmt.setString(1, corn_id);
+				
+				System.out.println(pstmt);
+				
+
+				rs = pstmt.executeQuery();
+
+				while (rs.next())
+				{
+					String id_name = type.equals("corn_id") ? "like_corn_id" : "corn_id";
+					Corn corn = selectOneCorn(rs.getString(id_name));
+
+					list.add(corn);
+
+				}
+
+			} catch (SQLException e) {
+
+				System.out.println("모든 좋아요 유저 조회에 실패했습니다.");
+				e.printStackTrace();
+
+			} finally {
+
+				if (pstmt != null)
+					try {
+						pstmt.close();
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+			}
+
+			return list;
+
+		}
+
+		
 }

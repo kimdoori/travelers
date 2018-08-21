@@ -10,26 +10,37 @@
 <meta charset="UTF-8">
 <title>계정 페이지</title>
 <link rel="stylesheet" href="css/account.css">
-<script src="js/account.js"></script>
-
+<link rel="stylesheet" href="css/comment.css">
 </head>
 <body>
 
 	<%
 		request.setCharacterEncoding("utf-8");
 
+		String corn_id = request.getParameter("id");
+
 		String user_id = (String) session.getAttribute("user_id");
+	
+		boolean isLogin = false;
+		boolean like = false;
+		if (user_id != null)
+			isLogin = true;
 
 		PopCornDAO dao = PopCornDAO.getInstance();
 
-		Corn corn = dao.selectOneCorn(user_id);
+		Corn corn = dao.selectOneCorn(corn_id);
 
 		if (corn == null) {//실패 
 			out.println("<script>alert('네트워크를 확인해주세요.');</script>");
 			out.println("<script> window.history.back();</script>");
 
 		} else {//성공
+			
+			like = dao.isLike(corn.getId(),user_id);
+
 	%>
+	
+	
 	<div class="content-profile-page">
 		<div class="profile-user-page card">
 			<div class="img-user-profile">
@@ -43,8 +54,19 @@
 				</div>
 			</div>
 
-			<a href="modifyPage.jsp"><button id="floating">MODIFY</button></a>
+			<a href="likeCorn.jsp?like=<%=like %>&corn_id=<%=corn.getId()%>&user_id=<%=user_id%>"><button id="floating">LIKE
+			
+					<%
+						if(isLogin && like)
+							out.println("♥");
+						else
+							out.println("♡");
 
+					
+					%>
+
+			</button></a>
+			
 			<div class="user-profile-data">
 				<h1><%=corn.getName()%></h1>
 				<p><%=corn.getNickname()%></p>
@@ -62,25 +84,14 @@
 		</div>
 	</div>
 
+	
 	<div class="content-profile-page">
 		<div class="profile-user-page card">
 			<div class="user-profile-data">
-				<h3>새로운 POP을 작성하시겠어요?</h3>
-				<a href="writePage.jsp" id="write">글 작성하기</a>
-			</div>
-
-		</div>
-	</div>
-	<div class="content-profile-page">
-		<div class="profile-user-page card">
-			<div class="user-profile-data">
-				<section style="text-align: right;">
-					<a href="deleteAll.jsp?corn_id=<%=user_id%>" id="write">전체
-						삭제하기</a>
-				</section>
+				
 				<section>
 					<%
-						List<Pop> list = dao.selectAllPop(user_id);
+						List<Pop> list = dao.selectAllPop(corn_id);
 							if (list.isEmpty()) {
 								out.println("게시한 POP이 없습니다.");
 							} else {
@@ -88,10 +99,6 @@
 					%>
 
 					<div class="pop">
-						<p class="extra">
-							<a href="modifyPopPage.jsp?id=<%=pop.getId()%>">수정하기</a><a
-								href="deletePop.jsp?id=<%=pop.getId()%>">&times;</a>
-						</p>
 						<h6><%=pop.getCorn_name()%>님의 POP입니다. ---
 							<%=pop.getLocation()%>
 							여행
@@ -106,19 +113,17 @@
 
 						<%
 							String[] photo = pop.getPhoto();
-										for (int i = 0; i < photo.length; i++) {
-											if (photo[i] != null) {
-												out.println("<img src='" + photo[i] + "'class='pop-img'><br><br>");
-											}
-										}
+							for (int i = 0; i < photo.length; i++) {
+								if (photo[i] != null) {
+									out.println("<img src='"+photo[i]+"'class='pop-img'><br><br>");
+								}
+							}
 						%>
+						
 
-
-						<p>
-							♡ &nbsp;<%=pop.getLike_num()%></p>
-						<a href="commentPage.jsp?id=<%=pop.getId()%>" id="write">댓글
-							작성하기</a>
-
+					<p>♡ &nbsp;<%=pop.getLike_num() %></p>
+					<a href="commentPage.jsp?id=<%=pop.getId() %>" id="write">댓글 작성하기</a>
+					
 
 					</div>
 					<%
