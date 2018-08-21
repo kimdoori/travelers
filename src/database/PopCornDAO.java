@@ -1563,7 +1563,7 @@ public class PopCornDAO {
 				location.setLocation_name(rs.getString("location"));
 
 				list.add(location);
-				if(i==3)
+				if(i==4)
 					break;
 
 			}
@@ -1614,7 +1614,7 @@ public class PopCornDAO {
 					location.setLocation_name(rs.getString("location"));
 
 					list.add(location);
-					if(i==3)
+					if(i==4)
 						break;
 
 				}
