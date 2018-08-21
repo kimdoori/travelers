@@ -23,6 +23,12 @@
 					pattern="{0,10}" /> <label class="form-label">Title</label>
 			</div>
 			<div class="form-group">
+				<input  name="tag" type="radio" value="see"
+					required="required" checked/> <label>볼거리</label>
+					<input name="tag" type="radio" value="food"
+					required="required" /> <label>먹거리</label>
+			</div>
+			<div class="form-group">
 				<input class="form-control" name="location"
 					required="required" pattern="{0,50}" /> <label class="form-label">Location</label>
 			</div>

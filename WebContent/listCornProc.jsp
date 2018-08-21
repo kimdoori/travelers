@@ -21,7 +21,8 @@
 		PopCornDAO dao = PopCornDAO.getInstance();
 		List<Corn> list = dao.selectAllCorn();
 		if (list.isEmpty()) {
-			out.println("회원이 없습니다.");
+			out.println("<div class='pop'>등록된 CORN 회원이 없습니다.</div>");
+
 		} else {
 	%>
 
@@ -29,11 +30,13 @@
 		<div class="profile-user-page card">
 
 			<%
+			boolean isVaild = false;
 				for (Corn corn : list) {
 						if (user_id != null && user_id.equals(corn.getId())) {
 							//out.println("다른 CORN 회원이 없습니다.");
 							continue;
 						}
+						isVaild=true;
 			%>
 			<div class="user-profile-data">
 
@@ -68,7 +71,13 @@
 
 			<%
 				}
+				
+				if(!isVaild)
+					out.println("<div class='pop'>등록된 다른 CORN 회원이 없습니다.</div>");
+
 				}
+		
+		
 			%>
 		</div>
 

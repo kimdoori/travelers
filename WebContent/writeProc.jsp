@@ -15,6 +15,8 @@
 	<% 	request.setCharacterEncoding("utf-8");
 	
 		String title = request.getParameter("title");
+		String tag = request.getParameter("tag");
+		
 		String location = request.getParameter("location");
 		String content = request.getParameter("content");
 		String[] photo = new String[3];
@@ -27,8 +29,8 @@
 		
 		
 
-		
-		Pop pop = new Pop(title,location,content,0,photo);
+		tag = tag.equals("see") ? "볼거리" : "먹거리";
+		Pop pop = new Pop(title,tag,location,content,0,photo);
 		
 		
 		System.out.println(pop);

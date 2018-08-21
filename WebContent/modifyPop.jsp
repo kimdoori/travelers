@@ -16,6 +16,8 @@
 	
 		int id = Integer.parseInt(request.getParameter("id"));
 		String title = request.getParameter("title");
+		String tag = request.getParameter("tag");
+
 		String location = request.getParameter("location");
 		String content = request.getParameter("content");
 		String[] photo = new String[3];
@@ -28,9 +30,10 @@
 		String reg_Date = request.getParameter("reg_date");
 
 		
+		tag = tag.equals("see") ? "볼거리" : "먹거리";
 
 		
-		Pop pop = new Pop(id,title,location,content,0,photo,reg_Date);
+		Pop pop = new Pop(id,title,tag,location,content,0,photo,reg_Date);
 		
 		
 		System.out.println(pop);

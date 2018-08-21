@@ -6,6 +6,7 @@ import java.util.Arrays;
 public class Pop {
 	private int id;
 	private String title;
+	private String tag;
 	private String corn_id;
 	private String corn_name;
 	private String location;
@@ -23,9 +24,10 @@ public class Pop {
 		super();
 	}
 	
-	public Pop(String title, String location, String content, int like_num, String[] photo) {
+	public Pop(String title,String tag, String location, String content, int like_num, String[] photo) {
 		super();
 		this.title = title;
+		this.tag= tag;
 		this.location = location;
 		this.content = content;
 		this.like_num = like_num;
@@ -40,10 +42,12 @@ public class Pop {
 		this.like_num = like_num;
 		this.photo = photo;
 	}
-	public Pop(int id,String title, String location, String content, int like_num, String[] photo,String reg_Date) {
+	public Pop(int id,String title, String tag, String location, String content, int like_num, String[] photo,String reg_Date) {
 		super();
 		this.id = id;
 		this.title = title;
+		this.tag= tag;
+
 		this.location = location;
 		this.content = content;
 		this.like_num = like_num;
@@ -75,6 +79,14 @@ public class Pop {
 
 	public void setCorn_id(String corn_id) {
 		this.corn_id = corn_id;
+	}
+
+	public String getTag() {
+		return tag;
+	}
+
+	public void setTag(String tag) {
+		this.tag = tag;
 	}
 
 	public String getCorn_name() {

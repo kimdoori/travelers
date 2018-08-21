@@ -27,12 +27,12 @@
 			<p>POP-CORN</p>
 		</h2>
 
-		<form class="search" action="/action_page.php"
+		<form class="search" action="search.jsp"
 			style="margin: auto; max-width: 500px">
 			<table style="width: 100%; height: 100%;">
 				<tr>
 					<td><input type="text" placeholder="검색할 내용을 입력하세요."
-						name="search2">
+						name="search">
 						<button type="submit">
 							<i class="fa fa-search"></i>
 						</button></td>
@@ -118,6 +118,7 @@
 									<div class="category"><%=pop.getLocation() %></div>
 									<h1 class="title"><%=pop.getTitle() %></h1>
 									<h2 class="sub_title"><%=pop.getCorn_name() %></h2>
+									<p><%=pop.getTag() %>여행</p>
 									
 									<div class="post-meta">
 										<span class="timestamp"><i class="fa fa-clock-">o</i><%=pop.getReg_Date() %></span><br>
@@ -144,8 +145,8 @@
 		<div class="content-profile-page">
 			<div class="profile-user-page card">
 				<div class="user-profile-data">
-					<h3>여기에 최신 등록순으로 계속</h3>
-					<a href="writePage.jsp" id="write">글 작성하기</a>
+					<h3>새로운 POP!</h3>
+					<jsp:include page="listPopProc.jsp"></jsp:include>
 				</div>
 
 			</div>

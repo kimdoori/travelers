@@ -65,19 +65,15 @@ public class PopCornDAO {
 		int return_code = -1;
 
 		try {
-			System.out.println(pop.getReg_Date());
-			if (pop.getReg_Date() == null || pop.getReg_Date().equals("")) {
-				pstmt = connection.prepareStatement("insert into pop(corn_id,title,location,content) values(?,?,?,?)");
 
-			} else {
-				pstmt = connection
-						.prepareStatement("insert into pop(corn_id,title,location,content,reg_date) values(?,?,?,?,?)");
-				pstmt.setString(5, pop.getReg_Date());
-			}
+			pstmt = connection
+					.prepareStatement("insert into pop(corn_id,title,tag,location,content) values(?,?,?,?,?)");
+
 			pstmt.setString(1, corn_id);
 			pstmt.setString(2, pop.getTitle());
-			pstmt.setString(3, pop.getLocation());
-			pstmt.setString(4, pop.getContent());
+			pstmt.setString(3, pop.getTag());
+			pstmt.setString(4, pop.getLocation());
+			pstmt.setString(5, pop.getContent());
 
 			pstmt.executeUpdate();
 
@@ -199,12 +195,14 @@ public class PopCornDAO {
 		int return_code = -1;
 
 		try {
-			pstmt = connection.prepareStatement("update pop set title = ?,location = ?,content = ? where id = ?");
+			pstmt = connection
+					.prepareStatement("update pop set title = ?, tag = ?, location = ?,content = ? where id = ?");
 
 			pstmt.setString(1, pop.getTitle());
-			pstmt.setString(2, pop.getLocation());
-			pstmt.setString(3, pop.getContent());
-			pstmt.setInt(4, pop.getId());
+			pstmt.setString(2, pop.getTag());
+			pstmt.setString(3, pop.getLocation());
+			pstmt.setString(4, pop.getContent());
+			pstmt.setInt(5, pop.getId());
 
 			pstmt.executeUpdate();
 
@@ -337,6 +335,7 @@ public class PopCornDAO {
 					pop.setCorn_id(rs.getString("corn_id"));
 					pop.setCorn_name(rs2.getString("name"));
 					pop.setTitle(rs.getString("title"));
+					pop.setTag(rs.getString("tag"));
 					pop.setLocation(rs.getString("location"));
 					pop.setContent(rs.getString("content"));
 					pop.setLike_num(rs.getInt("like_num"));
@@ -400,7 +399,7 @@ public class PopCornDAO {
 
 		try {
 
-			pstmt = connection.prepareStatement("select * from pop ");
+			pstmt = connection.prepareStatement("select * from pop order by reg_date desc ");
 
 			rs = pstmt.executeQuery();
 
@@ -418,6 +417,7 @@ public class PopCornDAO {
 					pop.setCorn_id(rs.getString("corn_id"));
 					pop.setCorn_name(rs2.getString("name"));
 					pop.setTitle(rs.getString("title"));
+					pop.setTag(rs.getString("tag"));
 					pop.setLocation(rs.getString("location"));
 					pop.setContent(rs.getString("content"));
 					pop.setLike_num(rs.getInt("like_num"));
@@ -502,12 +502,12 @@ public class PopCornDAO {
 					pop.setCorn_id(rs.getString("corn_id"));
 					pop.setCorn_name(rs2.getString("name"));
 					pop.setTitle(rs.getString("title"));
+					pop.setTag(rs.getString("tag"));
 					pop.setLocation(rs.getString("location"));
 					pop.setContent(rs.getString("content"));
 					pop.setLike_num(rs.getInt("like_num"));
 					pop.setReg_Date(rs.getString("reg_date"));
 					pop.setComment_num(getPopComment(rs.getInt("id")));
-
 
 					pstmt3 = connection.prepareStatement("select * from pop_detail where id = ?");
 					pstmt3.setInt(1, rs.getInt("id"));
@@ -562,7 +562,7 @@ public class PopCornDAO {
 		int return_code = -1;
 
 		try {
-			pstmt = connection.prepareStatement("insert into corn values(?,?,?,?,?,?,?)");
+			pstmt = connection.prepareStatement("insert into corn values(?,?,?,?,?,?,?,?)");
 
 			pstmt.setString(1, corn.getId());
 			pstmt.setString(2, corn.getPw());
@@ -571,6 +571,7 @@ public class PopCornDAO {
 			pstmt.setString(5, corn.getBirth());
 			pstmt.setString(6, corn.getPhone());
 			pstmt.setInt(7, 0);
+			pstmt.setString(8, "image/none.png");
 
 			pstmt.executeUpdate();
 			return_code = 0;
@@ -608,14 +609,15 @@ public class PopCornDAO {
 
 		try {
 			pstmt = connection.prepareStatement(
-					"update corn set pw = ?,name = ?,nickname = ?,birth = ?, phone = ? where id = ? ");
+					"update corn set pw = ?,name = ?,nickname = ?,birth = ?, phone = ?, profile= ? where id = ? ");
 
-			pstmt.setString(6, corn.getId());
+			pstmt.setString(7, corn.getId());
 			pstmt.setString(1, corn.getPw());
 			pstmt.setString(2, corn.getName());
 			pstmt.setString(3, corn.getNickname());
 			pstmt.setString(4, corn.getBirth());
 			pstmt.setString(5, corn.getPhone());
+			pstmt.setString(6, corn.getProfile());
 
 			pstmt.executeUpdate();
 			return_code = 0;
@@ -696,6 +698,7 @@ public class PopCornDAO {
 				corn.setNickname(rs.getString("nickname"));
 				corn.setBirth(rs.getString("birth"));
 				corn.setPhone(rs.getString("phone"));
+				corn.setProfile(rs.getString("profile"));
 				corn.setLike_num(rs.getInt("like_num"));
 				corn.setPop_num(getPopCount(rs.getString("id")));
 				corn.setMylike_num(getMyLikeCount(rs.getString("id")));
@@ -748,6 +751,7 @@ public class PopCornDAO {
 				corn.setNickname(rs.getString("nickname"));
 				corn.setBirth(rs.getString("birth"));
 				corn.setPhone(rs.getString("phone"));
+				corn.setProfile(rs.getString("profile"));
 				corn.setLike_num(rs.getInt("like_num"));
 				corn.setPop_num(getPopCount(rs.getString("id")));
 				corn.setMylike_num(getMyLikeCount(rs.getString("id")));
@@ -784,8 +788,7 @@ public class PopCornDAO {
 
 		try {
 
-			String sql = "select * from pop where title like '%" + keyword + "%' or location like '%" + keyword
-					+ "%' or content  '%" + keyword + "%'";
+			String sql = "select * from pop where location like '%" + keyword + "%' order by like_num";
 
 			pstmt = connection.prepareStatement(sql);
 
@@ -794,14 +797,7 @@ public class PopCornDAO {
 			while (rs.next())
 
 			{
-				Pop pop = new Pop();
-
-				pop.setId(rs.getInt("id"));
-				pop.setTitle(rs.getString("title"));
-				pop.setLocation(rs.getString("location"));
-				pop.setContent(rs.getString("content"));
-				pop.setLike_num(rs.getInt("like_num"));
-				pop.setReg_Date(rs.getString("reg_date"));
+				Pop pop = selectOnePop(rs.getInt("id"));
 
 				list.add(pop);
 
@@ -826,6 +822,54 @@ public class PopCornDAO {
 
 	}
 
+	
+	// 검색 기능 (키워드가 들어간 유저와 게시글 )
+		public List<Pop> searchPop(String keyword,String tag) {
+
+			PreparedStatement pstmt = null;
+
+			ResultSet rs = null;
+
+			List<Pop> list = new ArrayList<Pop>();
+
+			try {
+
+				String sql = "select * from pop where location like '%" + keyword + "%' and tag = '"+tag+"' order by like_num";
+
+				pstmt = connection.prepareStatement(sql);
+				System.out.println(pstmt);
+
+				rs = pstmt.executeQuery();
+
+				int i=0;
+				while (rs.next())
+				{	i++;
+					Pop pop = selectOnePop(rs.getInt("id"));
+
+					list.add(pop);
+					if(i == 2)
+						break;
+
+				}
+
+			} catch (SQLException e) {
+
+				System.out.println("게시글 검색에  실패했습니다.");
+				e.printStackTrace();
+
+			} finally {
+
+				if (pstmt != null)
+					try {
+						pstmt.close();
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+			}
+
+			return list;
+
+		}
 	public List<Corn> searchCorn(String keyword) {
 
 		PreparedStatement pstmt = null;
@@ -1404,6 +1448,7 @@ public class PopCornDAO {
 
 		return num;
 	}
+
 	public int getMyLikeCount(String corn_id) {
 		PreparedStatement pstmt = null;
 

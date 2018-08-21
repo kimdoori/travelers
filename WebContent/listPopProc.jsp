@@ -10,7 +10,6 @@
 <meta charset="UTF-8">
 <title>pop</title>
 <link rel="stylesheet" href="css/account.css">
-<script src="js/account.js"></script>
 
 </head>
 <body>
@@ -18,9 +17,9 @@
 	<%
 		request.setCharacterEncoding("utf-8");
 
-		String user_id = (String) session.getAttribute("user_id");
 
 		PopCornDAO dao = PopCornDAO.getInstance();
+		String user_id = (String) session.getAttribute("user_id");
 
 		boolean isLogin = false;
 		if (user_id != null)
@@ -36,7 +35,7 @@
 					<%
 						List<Pop> list = dao.selectAllPop();
 						if (list.isEmpty()) {
-							out.println("게시된 POP이 없습니다.");
+							out.println("<div class='pop'>게시된 POP이 없습니다.</div>");
 						} else {
 							for (Pop pop : list) {
 					%>
@@ -52,10 +51,18 @@
 						</p>
 						<%
 							}
+							String[] photo = pop.getPhoto();
+							for(int i=0;i<photo.length;i++){
+								if(photo[i]!=null){
+									out.println("<img src='"+photo[i]+"' class='pre-photo'>");
+								}
+							}
 						%>
-						<h6><a href="cornPage.jsp?id=<%=pop.getCorn_id()%>"><%=pop.getCorn_name()%></a>님의 POP입니다. ---
+						
+						
+						<h6><a href="cornPage.jsp?id=<%=pop.getCorn_id()%>"><%=pop.getCorn_name()%></a>님의 POP입니다. --
 							<%=pop.getLocation()%>
-							여행
+							여행(<%=pop.getTag() %>)
 						</h6>
 						<h3>
 							<%=pop.getTitle()%>

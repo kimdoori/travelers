@@ -99,9 +99,9 @@
 					%>
 
 					<div class="pop">
-						<h6><%=pop.getCorn_name()%>님의 POP입니다. ---
+						<h6><%=pop.getCorn_name()%>님의 POP입니다. --
 							<%=pop.getLocation()%>
-							여행
+							여행(<%=pop.getTag() %>)
 						</h6>
 						<h3>
 							<%=pop.getTitle()%>

@@ -15,14 +15,17 @@
 	<% 	request.setCharacterEncoding("utf-8");
 	
 		String user_id = (String) session.getAttribute("user_id");
+		
 		String user_pw = request.getParameter("pw");
 		String user_name = request.getParameter("name");
 		String user_nickname = request.getParameter("nickname");
 		String user_birth = request.getParameter("birth");
 		String user_phone = request.getParameter("phone");
+		String profile = request.getParameter("profile");
+		profile = profile == null || profile.equals("") ? "image/none.png" : "image/"+profile;
+
 		
-		
-		Corn corn = new Corn(user_id,user_pw,user_name,user_nickname,user_birth,user_phone,0);
+		Corn corn = new Corn(user_id,user_pw,user_name,user_nickname,user_birth,user_phone,0,profile);
 		
 		System.out.println("정보수정 "+corn);
 		PopCornDAO dao = PopCornDAO.getInstance();

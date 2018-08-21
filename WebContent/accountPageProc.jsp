@@ -35,10 +35,10 @@
 			<div class="img-user-profile">
 				<div class="card hovercard">
 					<div class="card-background">
-						<img class="card-bkimg" alt="" src="image/none.png">
+						<img class="card-bkimg" alt="" src="<%=corn.getProfile()%>">
 					</div>
 					<div class="useravatar">
-						<img alt="" src="image/none.png">
+						<img alt="" src="<%=corn.getProfile()%>">
 					</div>
 				</div>
 			</div>
@@ -93,9 +93,9 @@
 							<a href="modifyPopPage.jsp?id=<%=pop.getId()%>">수정하기</a><a
 								href="deletePop.jsp?id=<%=pop.getId()%>">&times;</a>
 						</p>
-						<h6><%=pop.getCorn_name()%>님의 POP입니다. ---
+						<h6><%=pop.getCorn_name()%>님의 POP입니다. --
 							<%=pop.getLocation()%>
-							여행
+							여행(<%=pop.getTag() %>)
 						</h6>
 						<h3>
 							<%=pop.getTitle()%>

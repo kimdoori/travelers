@@ -11,6 +11,7 @@ public class Corn {
 	private int like_num;
 	private int pop_num;
 	private int mylike_num;
+	private String profile;
 	
 	
 	
@@ -74,6 +75,12 @@ public class Corn {
 	}
 	
 	
+	public String getProfile() {
+		return profile;
+	}
+	public void setProfile(String profile) {
+		this.profile = profile;
+	}
 	public Corn() {
 		super();
 	}
@@ -106,6 +113,17 @@ public class Corn {
 		this.like_num = like_num;
 	}
 	
+	public Corn(String id, String pw, String name, String nickname, String birth, String phone, int like_num,String profile) {
+		super();
+		this.id = id;
+		this.pw = pw;
+		this.name = name;
+		this.nickname = nickname;
+		this.birth = birth;
+		this.phone = phone;
+		this.like_num = like_num;
+		this.profile = profile;
+	}
 	
 	
 	public Corn(String id, String pw, String name, String nickname, String birth, String phone, int like_num,
@@ -120,6 +138,7 @@ public class Corn {
 		this.like_num = like_num;
 		this.pop_num = pop_num;
 	}
+	
 	@Override
 	public String toString() {
 		return "Corn [id=" + id + ", pw=" + pw + ", name=" + name + ", nickname=" + nickname + ", birth=" + birth

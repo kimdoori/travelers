@@ -55,7 +55,7 @@
 							}
 					%>
 
-					<h6><%=pop.getCorn_name()%>님의 POP입니다. ---
+					<h6><a href="cornPage.jsp?id=<%=pop.getCorn_id()%>"><%=pop.getCorn_name()%></a>님의 POP입니다. ---
 						<%=pop.getLocation()%>
 						여행
 					</h6>
