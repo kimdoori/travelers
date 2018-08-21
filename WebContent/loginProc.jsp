@@ -33,6 +33,8 @@
 		
 			session.setAttribute("user_id", user_id);
 			session.setAttribute("user_name", corn.getName());
+			session.setAttribute("user_birth", corn.getBirth());
+			
 			
 	        //response.sendRedirect("accountPage.jsp");
 			out.println("<script> location.href='accountPage.jsp'</script>");

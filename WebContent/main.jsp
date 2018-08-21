@@ -47,32 +47,70 @@
 			<div class="profile-user-page card">
 				<div class="user-profile-data">
 					<h3>여기로 여행은 어떠신가요?</h3>
-					<h5>인기있는 여행지 순위</h5>
-					<%
-						List<Location> list = dao.selectAllLoaction();
-						if (list.isEmpty()) {
-							out.println("<div class='pop'>등록된 여행지가 없습니다.</div>");
-						} else {
-							int i = 0;
-							for (Location location : list) {
-					%>
-					<p><%=++i%>순위.
-						<%=location.getLocation_name()%>
-						(<%=location.getCount()%>개의 POP)
-					</p>
+					<div class='pop'>
+
+						<h5><strong>인기있는 여행지 순위</strong></h5>
+						<%
+							List<Location> list = dao.selectAllLoaction();
+							if (list.isEmpty()) {
+								out.println("<div class='pop'>등록된 여행지가 없습니다.</div>");
+							} else {
+								int i = 0;
+
+								for (Location location : list) {
+						%>
+						<p><%=++i%>순위. <strong><%=location.getLocation_name()%></strong>
+							(<%=location.getCount()%>개의 POP)
+						</p>
 
 
-					<%
+						<%
+							}
+								out.println("</div>");
+
+								//out.println("총 " + i + "개의 여행지");
+							}
+							
+							String user_birth = (String)session.getAttribute("user_birth");
+								
+							if(user_birth!=null && !user_birth.equals("")){
+								String year = user_birth.substring(0,user_birth.indexOf("-"));
+	//							System.out.println("year"+year);
+								
+						%>
+						
+						<div class='pop'>
+
+						<h5><strong>내 나이대 여행지 순위</strong> <%=Integer.parseInt(year)-4 %> ~ <%=Integer.parseInt(year)+4 %>년생</h5>
+						<%
+							List<Location> ageList = dao.selectAllLoaction(year);
+							if (ageList.isEmpty()) {
+								out.println("<div class='pop'>등록된 여행지가 없습니다.</div>");
+							} else {
+								int i = 0;
+								for (Location location : ageList) {
+						%>
+						<p><%=++i%>순위. <strong><%=location.getLocation_name()%></strong>
+							(<%=location.getCount()%>개의 POP)
+						</p>
+
+
+						<%
+							}
+								//out.println("총 " + i + "개의 여행지");
+							}
+						%>
+						</div>
+						
+						<%
 						}
-							out.println("총 " + i + "개의 여행지");
-						}
-					%>
+						%>
+					</div>
 
 				</div>
-
 			</div>
-		</div>
 	</section>
+
 	<section>
 		<div class="content-profile-page">
 			<div class="profile-user-page card">
@@ -91,46 +129,47 @@
 
 
 						<div class="column">
-						<a href="commentPage.jsp?id=<%=pop.getId()%>">
+							<a href="commentPage.jsp?id=<%=pop.getId()%>">
 
-							<div class="post-module">
-								<!-- Thumbnail-->
-								<div class="thumbnail">
-									<div class="date">
-										<div class="day"><%=pop.getLike_num() %></div>
-										<div class="month">♥</div>
+								<div class="post-module">
+									<!-- Thumbnail-->
+									<div class="thumbnail">
+										<div class="date">
+											<div class="day"><%=pop.getLike_num()%></div>
+											<div class="month">♥</div>
+										</div>
+										<%
+											String[] photo = pop.getPhoto();
+													String photo_location = "image/none.png";
+													for (int j = 0; j < photo.length; j++) {
+														if (photo[j] != null) {
+															photo_location = photo[j];
+															break;
+														}
+													}
+										%>
+										<img src="<%=photo_location%>" />
 									</div>
-									<%
-										String[] photo = pop.getPhoto();
-										String photo_location = "image/none.png";
-										for(int j=0;j<photo.length;j++){
-											if(photo[j]!=null){
-												photo_location = photo[j];
-												break;
-											}
-										}
-									%>
-									<img
-										src="<%=photo_location %>" />
-								</div>
-								<!-- Post Content-->
-								<div class="post-content">
-									<div class="category"><%=pop.getLocation() %></div>
-									<h1 class="title"><%=pop.getTitle() %></h1>
-									<h2 class="sub_title"><%=pop.getCorn_name() %></h2>
-									<p><%=pop.getTag() %>여행</p>
-									
-									<div class="post-meta">
-										<span class="timestamp"><i class="fa fa-clock-">o</i><%=pop.getReg_Date() %></span><br>
-										<span class="comments"><i class="fa fa-comments"></i> <%=pop.getComment_num() %> comments</span>
+									<!-- Post Content-->
+									<div class="post-content">
+										<div class="category"><%=pop.getLocation()%></div>
+										<h1 class="title"><%=pop.getTitle()%></h1>
+										<h2 class="sub_title"><%=pop.getCorn_name()%></h2>
+										<p><%=pop.getTag()%>여행
+										</p>
+
+										<div class="post-meta">
+											<span class="timestamp"><i class="fa fa-clock-">o</i><%=pop.getReg_Date()%></span><br>
+											<span class="comments"><i class="fa fa-comments"></i>
+												<%=pop.getComment_num()%> comments</span>
+										</div>
 									</div>
 								</div>
-							</div>
 							</a>
 						</div>
 
 						<%
-								}
+							}
 								//out.println("총 "+i+"개의 검색결과");
 							}
 						%>

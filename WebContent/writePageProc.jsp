@@ -33,8 +33,15 @@
 					required="required" pattern="{0,50}" /> <label class="form-label">Location</label>
 			</div>
 			<div class="form-group">
+				<input class="form-control" name="reason" type="text"
+					required="required" pattern="{0,50}" /> <label class="form-label">Recommended Reason</label>
+			</div>
+			<div class="form-group">
 				<input class="form-control" name="content" type="text"
 					required="required" pattern="{0,50}" /> <label class="form-label">Content</label>
+			</div>
+			<div class="form-group">
+			사진은 0~3 장 올릴 수 있습니다.
 			</div>
 			<div class="form-group">
 				<input class="form-control" name="photo1" type="file"/> <label class="form-label">Photo</label>

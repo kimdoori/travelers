@@ -46,10 +46,10 @@
 			<div class="img-user-profile">
 				<div class="card hovercard">
 					<div class="card-background">
-						<img class="card-bkimg" alt="" src="image/none.png">
+						<img class="card-bkimg" alt="" src="<%=corn.getProfile()%>">
 					</div>
 					<div class="useravatar">
-						<img alt="" src="image/none.png">
+						<img alt="" src="<%=corn.getProfile()%>">
 					</div>
 				</div>
 			</div>

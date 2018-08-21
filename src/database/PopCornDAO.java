@@ -67,13 +67,14 @@ public class PopCornDAO {
 		try {
 
 			pstmt = connection
-					.prepareStatement("insert into pop(corn_id,title,tag,location,content) values(?,?,?,?,?)");
+					.prepareStatement("insert into pop(corn_id,title,tag,location,reason,content) values(?,?,?,?,?,?)");
 
 			pstmt.setString(1, corn_id);
 			pstmt.setString(2, pop.getTitle());
 			pstmt.setString(3, pop.getTag());
 			pstmt.setString(4, pop.getLocation());
-			pstmt.setString(5, pop.getContent());
+			pstmt.setString(5, pop.getReason());
+			pstmt.setString(6, pop.getContent());
 
 			pstmt.executeUpdate();
 
@@ -196,13 +197,14 @@ public class PopCornDAO {
 
 		try {
 			pstmt = connection
-					.prepareStatement("update pop set title = ?, tag = ?, location = ?,content = ? where id = ?");
+					.prepareStatement("update pop set title = ?, tag = ?, location = ?, reason = ?, content = ? where id = ?");
 
 			pstmt.setString(1, pop.getTitle());
 			pstmt.setString(2, pop.getTag());
 			pstmt.setString(3, pop.getLocation());
-			pstmt.setString(4, pop.getContent());
-			pstmt.setInt(5, pop.getId());
+			pstmt.setString(4, pop.getReason());
+			pstmt.setString(5, pop.getContent());
+			pstmt.setInt(6, pop.getId());
 
 			pstmt.executeUpdate();
 
@@ -336,6 +338,7 @@ public class PopCornDAO {
 					pop.setCorn_name(rs2.getString("name"));
 					pop.setTitle(rs.getString("title"));
 					pop.setTag(rs.getString("tag"));
+					pop.setReason(rs.getString("reason"));
 					pop.setLocation(rs.getString("location"));
 					pop.setContent(rs.getString("content"));
 					pop.setLike_num(rs.getInt("like_num"));
@@ -418,6 +421,7 @@ public class PopCornDAO {
 					pop.setCorn_name(rs2.getString("name"));
 					pop.setTitle(rs.getString("title"));
 					pop.setTag(rs.getString("tag"));
+					pop.setReason(rs.getString("reason"));
 					pop.setLocation(rs.getString("location"));
 					pop.setContent(rs.getString("content"));
 					pop.setLike_num(rs.getInt("like_num"));
@@ -503,6 +507,7 @@ public class PopCornDAO {
 					pop.setCorn_name(rs2.getString("name"));
 					pop.setTitle(rs.getString("title"));
 					pop.setTag(rs.getString("tag"));
+					pop.setReason(rs.getString("reason"));
 					pop.setLocation(rs.getString("location"));
 					pop.setContent(rs.getString("content"));
 					pop.setLike_num(rs.getInt("like_num"));
@@ -788,7 +793,7 @@ public class PopCornDAO {
 
 		try {
 
-			String sql = "select * from pop where location like '%" + keyword + "%' order by like_num";
+			String sql = "select * from pop where location like '%" + keyword + "%' order by like_num desc";
 
 			pstmt = connection.prepareStatement(sql);
 
@@ -834,7 +839,7 @@ public class PopCornDAO {
 
 			try {
 
-				String sql = "select * from pop where location like '%" + keyword + "%' and tag = '"+tag+"' order by like_num";
+				String sql = "select * from pop where location like '%" + keyword + "%' and tag = '"+tag+"' order by like_num desc";
 
 				pstmt = connection.prepareStatement(sql);
 				System.out.println(pstmt);
@@ -1549,13 +1554,17 @@ public class PopCornDAO {
 					.prepareStatement("select count(*),location from pop group by location order by count(*) desc");
 
 			rs = pstmt.executeQuery();
-
+			
+			int i=0;
 			while (rs.next()) {
+				i++;
 				Location location = new Location();
 				location.setCount(rs.getInt("count(*)"));
 				location.setLocation_name(rs.getString("location"));
 
 				list.add(location);
+				if(i==3)
+					break;
 
 			}
 
@@ -1577,6 +1586,57 @@ public class PopCornDAO {
 		return list;
 
 	}
+	// 지역 검색
+		public List<Location> selectAllLoaction(String year) {
+			// type : like_corn_id(like me) corn_id(my like)
+
+			PreparedStatement pstmt = null;
+
+			ResultSet rs = null;
+
+			List<Location> list = new ArrayList<Location>();
+
+			try {
+
+				String sql = "select count(*),location from pop where corn_id in "+
+				"(select id from corn where birth >= '"+(Integer.parseInt(year)-4)+"' and birth <= '"+(Integer.parseInt(year)+4)+"') "+
+				"group by location order by count(*) desc";
+				
+				pstmt = connection.prepareStatement(sql);
+
+				rs = pstmt.executeQuery();
+				
+				int i=0;
+				while (rs.next()) {
+					i++;
+					Location location = new Location();
+					location.setCount(rs.getInt("count(*)"));
+					location.setLocation_name(rs.getString("location"));
+
+					list.add(location);
+					if(i==3)
+						break;
+
+				}
+
+			} catch (SQLException e) {
+
+				System.out.println("지역 조회에 실패했습니다.");
+				e.printStackTrace();
+
+			} finally {
+
+				if (pstmt != null)
+					try {
+						pstmt.close();
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+			}
+
+			return list;
+
+		}
 
 	// 인기 게시물
 	public List<Pop> selectPopularPop() {

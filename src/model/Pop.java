@@ -10,6 +10,7 @@ public class Pop {
 	private String corn_id;
 	private String corn_name;
 	private String location;
+	private String reason;
 	private String content;
 	private int like_num;
 	private String[] photo;
@@ -24,11 +25,12 @@ public class Pop {
 		super();
 	}
 	
-	public Pop(String title,String tag, String location, String content, int like_num, String[] photo) {
+	public Pop(String title,String tag, String location,String reason, String content, int like_num, String[] photo) {
 		super();
 		this.title = title;
 		this.tag= tag;
 		this.location = location;
+		this.reason = reason;
 		this.content = content;
 		this.like_num = like_num;
 		this.photo = photo;
@@ -42,12 +44,12 @@ public class Pop {
 		this.like_num = like_num;
 		this.photo = photo;
 	}
-	public Pop(int id,String title, String tag, String location, String content, int like_num, String[] photo,String reg_Date) {
+
+	public Pop(int id,String title, String tag, String location,String content, int like_num, String[] photo,String reg_Date) {
 		super();
 		this.id = id;
 		this.title = title;
 		this.tag= tag;
-
 		this.location = location;
 		this.content = content;
 		this.like_num = like_num;
@@ -100,6 +102,14 @@ public class Pop {
 	}
 
 
+
+	public String getReason() {
+		return reason;
+	}
+
+	public void setReason(String reason) {
+		this.reason = reason;
+	}
 
 	public String getTitle() {
 		return title;

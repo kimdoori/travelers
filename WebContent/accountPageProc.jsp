@@ -95,7 +95,7 @@
 						</p>
 						<h6><%=pop.getCorn_name()%>님의 POP입니다. --
 							<%=pop.getLocation()%>
-							여행(<%=pop.getTag() %>)
+							여행 &nbsp;&nbsp;&nbsp; #<%=pop.getTag() %>
 						</h6>
 						<h3>
 							<%=pop.getTitle()%>

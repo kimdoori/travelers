@@ -42,10 +42,10 @@
 
 				<div class="container">
 					<div class="service-details">
-						<img src="image/none.png" alt="profile">
+						<img src="<%=corn.getProfile() %>" alt="profile">
 						<div class="service-hover-text">
 							<h3><%=corn.getName()%></h3>
-							<h4>Developer</h4>
+							<h4><%=corn.getBirth()%></h4>
 							<p>
 							<table class="info-table">
 								<tr>

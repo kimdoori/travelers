@@ -16,8 +16,8 @@
 	
 		String title = request.getParameter("title");
 		String tag = request.getParameter("tag");
-		
 		String location = request.getParameter("location");
+		String reason = request.getParameter("reason");
 		String content = request.getParameter("content");
 		String[] photo = new String[3];
 		String photo1 = request.getParameter("photo1");
@@ -30,7 +30,7 @@
 		
 
 		tag = tag.equals("see") ? "볼거리" : "먹거리";
-		Pop pop = new Pop(title,tag,location,content,0,photo);
+		Pop pop = new Pop(title,tag,location,reason,content,0,photo);
 		
 		
 		System.out.println(pop);

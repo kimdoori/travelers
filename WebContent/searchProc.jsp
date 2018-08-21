@@ -194,9 +194,9 @@
 					%>
 					<h6>
 						<a href="cornPage.jsp?id=<%=pop.getCorn_id()%>"><%=pop.getCorn_name()%></a>님의
-						POP입니다. ---
+						POP입니다. --
 						<%=pop.getLocation()%>
-						여행
+						여행 &nbsp;&nbsp;&nbsp; #<%=pop.getTag() %>
 					</h6>
 					<h3>
 						<%=pop.getTitle()%>
@@ -204,7 +204,7 @@
 					<p>
 						<%=pop.getReg_Date()%></p>
 					<h5>
-						<%=pop.getContent()%></h5>
+						"<%=pop.getReason()%>" 이래서 추천합니다.</h5>
 
 					<p>
 						♡ &nbsp;<%=pop.getLike_num()%></p>
