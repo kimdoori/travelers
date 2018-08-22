@@ -14,8 +14,11 @@
 
 	<%
 		request.setCharacterEncoding("utf-8");
+	
+		String user_id = (String)session.getAttribute("user_id");
 
-		String user_id = request.getParameter("corn_id");
+
+		String corn_id = request.getParameter("corn_id");
 
 		if (user_id == null || user_id.equals("")) {
 	%>
@@ -27,10 +30,11 @@
 			PopCornDAO dao = PopCornDAO.getInstance();
 
 			int pop_id = Integer.parseInt(request.getParameter("pop_id"));
+			String page_type = request.getParameter("page");
 			boolean like = Boolean.parseBoolean(request.getParameter("like"));
 			
 			Pop pop = dao.selectOnePop(pop_id);
-			Corn corn = dao.selectOneCorn(user_id);
+			Corn corn = dao.selectOneCorn(corn_id);
 			
 			int status_code = -1;
 			if(like)
@@ -40,9 +44,22 @@
 			
 			String[] status = { "네트워크를 확인해주세요." };
 
-			if (status_code == 0) {//성공	
+			if (status_code == 0) {//성공
+				if(page_type == null){
+					out.println("<script> window.history.back(); </script>");
+				}else if(page_type.equals("commentPage")){
+					out.println("<script> location.href='"+page_type+".jsp?id="+pop_id+"'</script>");
+				}else if(page_type.equals("accountPage")){
+					out.println("<script> location.href='"+page_type+".jsp?id="+corn_id+"'</script>");
+				}else if(page_type.equals("cornPage")){
+					String id = request.getParameter("id");
+					out.println("<script> location.href='"+page_type+".jsp?id="+id+"'</script>");
+
+				}else{
+					out.println("<script> location.href='"+page_type+".jsp'</script>");
+
+				}
 				
-				out.println("<script> location.href='commentPage.jsp?id="+pop_id+"'</script>");
 
 			} else {
 				out.println("<script>alert('" + status[status_code - 1] + "');</script>");

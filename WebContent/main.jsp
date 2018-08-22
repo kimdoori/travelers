@@ -52,7 +52,7 @@
 						<h5><strong>인기있는 여행지 순위</strong></h5>
 						<%
 							List<Location> list = dao.selectAllLoaction();
-							if (list.isEmpty()) {
+							if (list==null || list.isEmpty()) {
 								out.println("<div class='pop'>등록된 여행지가 없습니다.</div>");
 							} else {
 								int i = 0;
@@ -84,7 +84,7 @@
 						<h5><strong>내 나이대 여행지 순위</strong> <%=Integer.parseInt(year)-4 %> ~ <%=Integer.parseInt(year)+4 %>년생</h5>
 						<%
 							List<Location> ageList = dao.selectAllLoaction(year);
-							if (ageList.isEmpty()) {
+							if (ageList==null || ageList.isEmpty()) {
 								out.println("<div class='pop'>등록된 여행지가 없습니다.</div>");
 							} else {
 								int i = 0;
@@ -120,7 +120,7 @@
 
 						<%
 							List<Pop> popList = dao.selectPopularPop();
-							if (popList.isEmpty()) {
+							if (popList==null || popList.isEmpty()) {
 								out.println("<div class='pop'>인기있는 POP이 없습니다.</div>");
 							} else {
 								int i = 0;

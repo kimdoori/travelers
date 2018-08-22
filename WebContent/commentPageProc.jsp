@@ -84,7 +84,7 @@
 
 					<p>
 						<a
-							href="like.jsp?like=<%=like%>&pop_id=<%=pop.getId()%>&corn_id=<%=user_id%>">
+							href="like.jsp?like=<%=like%>&pop_id=<%=pop.getId()%>&corn_id=<%=user_id%>&page=commentPage">
 							<%
 								if (isLogin && like)
 										out.println("♥");

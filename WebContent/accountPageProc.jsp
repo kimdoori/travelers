@@ -29,6 +29,12 @@
 			out.println("<script> window.history.back();</script>");
 
 		} else {//성공
+			
+			boolean isLogin = false;
+			boolean like = false;
+			if (user_id != null)
+				isLogin = true;
+		
 	%>
 	<div class="content-profile-page">
 		<div class="profile-user-page card">
@@ -86,6 +92,7 @@
 								out.println("<div class='pop'>게시한 POP이 없습니다.</div>");
 							} else {
 								for (Pop pop : list) {
+									like = dao.isLike(pop.getId(), user_id);
 					%>
 
 					<div class="pop">
@@ -115,8 +122,15 @@
 						%>
 
 
-						<p>
-							♡ &nbsp;<%=pop.getLike_num()%></p>
+						<p><a
+							href="like.jsp?like=<%=like%>&pop_id=<%=pop.getId()%>&corn_id=<%=user_id%>&page=accountPage">
+							<%
+								if (isLogin && like)
+										out.println("♥");
+									else
+										out.println("♡");
+							%>
+						</a> &nbsp;<%=pop.getLike_num()%></p>
 						<a href="commentPage.jsp?id=<%=pop.getId()%>" id="write">댓글
 							작성하기</a>
 

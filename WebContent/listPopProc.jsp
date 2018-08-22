@@ -24,6 +24,9 @@
 		boolean isLogin = false;
 		if (user_id != null)
 			isLogin = true;
+		
+		boolean like = false;
+		
 	%>
 
 
@@ -57,6 +60,8 @@
 									out.println("<img src='"+photo[i]+"' class='pre-photo'>");
 								}
 							}
+							like = dao.isLike(pop.getId(), user_id);
+
 						%>
 						
 						
@@ -72,8 +77,15 @@
 						<h5>
 							"<%=pop.getReason()%>" 이래서 추천합니다.</h5>
 
-						<p>
-							♡ &nbsp;<%=pop.getLike_num()%></p>
+						<p><a
+							href="like.jsp?like=<%=like%>&pop_id=<%=pop.getId()%>&corn_id=<%=user_id%>&page=listPop">
+							<%
+								if (isLogin && like)
+										out.println("♥");
+									else
+										out.println("♡");
+							%>
+						</a> &nbsp;<%=pop.getLike_num()%></p>
 						<a href="commentPage.jsp?id=<%=pop.getId()%>" id="write">더
 							보기..</a>
 

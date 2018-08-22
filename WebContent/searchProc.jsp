@@ -26,6 +26,10 @@
 		boolean isLogin = false;
 		if (user_id != null)
 			isLogin = true;
+		
+	
+		
+		boolean like = false;
 
 		PopCornDAO dao = PopCornDAO.getInstance();
 	%>
@@ -191,6 +195,8 @@
 							out.println("<img src='"+photo[i]+"' class='pre-photo'>");
 						}
 					}
+					like = dao.isLike(pop.getId(), user_id);
+
 					%>
 					<h6>
 						<a href="cornPage.jsp?id=<%=pop.getCorn_id()%>"><%=pop.getCorn_name()%></a>님의
@@ -207,7 +213,14 @@
 						"<%=pop.getReason()%>" 이래서 추천합니다.</h5>
 
 					<p>
-						♡ &nbsp;<%=pop.getLike_num()%></p>
+						
+							<%
+								if (isLogin && like)
+										out.println("♥");
+									else
+										out.println("♡");
+							%>
+						 &nbsp;<%=pop.getLike_num()%></p>
 					<a href="commentPage.jsp?id=<%=pop.getId()%>" id="write">더 보기..</a>
 
 

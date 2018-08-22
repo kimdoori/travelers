@@ -96,6 +96,10 @@
 								out.println("<div class='pop' style='text-align:center;'>게시한 POP이 없습니다.</div>");
 							} else {
 								for (Pop pop : list) {
+									boolean like_pop = false;
+									
+									like_pop=dao.isLike(pop.getId(), user_id);
+
 					%>
 
 					<div class="pop">
@@ -121,7 +125,15 @@
 						%>
 						
 
-					<p>♡ &nbsp;<%=pop.getLike_num() %></p>
+					<p><a
+							href="like.jsp?like=<%=like_pop%>&pop_id=<%=pop.getId()%>&corn_id=<%=user_id%>&page=cornPage&id=<%=corn_id%>">
+							<%
+								if (isLogin && like_pop)
+										out.println("♥");
+									else
+										out.println("♡");
+							%>
+						</a> &nbsp;<%=pop.getLike_num() %></p>
 					<a href="commentPage.jsp?id=<%=pop.getId() %>" id="write">댓글 작성하기</a>
 					
 
